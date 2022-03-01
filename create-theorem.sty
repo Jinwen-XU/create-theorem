@@ -280,7 +280,7 @@
       { % Patch the cref formats so that definite articles are placed outside the hyperlinks
         \bool_if:NT \l__crthm_nameinlink_bool
           { % Use the definite article of the original language, with name's casing depends on the preposition and the article
-            \crefthe_patch_format:nnnnn { 2 } { #4 ref@ #1 @format } { #4 ref@ #1 @name }
+            \crefthe_patch_format:nnnn { #4 ref@ #1 @format } { #4 ref@ #1 @name }
               { \tl_use:c { g_crthm_name_ #4 ref_article_singular_ #2 _ #3 _tl } }
               {
                 \bool_if:NTF \g__crefthe_has_prep_bool
@@ -291,7 +291,7 @@
                     \tl_use:c { g_crthm_name_ #4 ref_singular_ #2 _ #3 _tl }
                   }
               }
-            \crefthe_patch_format:nnnnn { 2 } { #4 ref@ #1 @format@first } { #4 ref@ #1 @name@plural }
+            \crefthe_patch_format:nnnn { #4 ref@ #1 @format@first } { #4 ref@ #1 @name@plural }
               { \tl_use:c { g_crthm_name_ #4 ref_article_plural_ #2 _ #3 _tl } }
               {
                 \bool_if:NTF \g__crefthe_has_prep_bool
@@ -302,7 +302,7 @@
                     \tl_use:c { g_crthm_name_ #4 ref_plural_ #2 _ #3 _tl }
                   }
               }
-            \crefthe_patch_format:nnnnn { 3 } { #4 refrange@ #1 @format } { #4 ref@ #1 @name@plural }
+            \crefthe_patch_format:nnnn { #4 refrange@ #1 @format } { #4 ref@ #1 @name@plural }
               { \tl_use:c { g_crthm_name_ #4 ref_article_plural_ #2 _ #3 _tl } }
               {
                 \bool_if:NTF \g__crefthe_has_prep_bool
@@ -313,7 +313,7 @@
                     \tl_use:c { g_crthm_name_ #4 ref_plural_ #2 _ #3 _tl }
                   }
               }
-            \crefthe_patch_format:nnnnn { 3 } { #4 refrange@ #1 @format@first } { #4 ref@ #1 @name@plural }
+            \crefthe_patch_format:nnnn { #4 refrange@ #1 @format@first } { #4 ref@ #1 @name@plural }
               { \tl_use:c { g_crthm_name_ #4 ref_article_plural_ #2 _ #3 _tl } }
               {
                 \bool_if:NTF \g__crefthe_has_prep_bool
@@ -325,29 +325,29 @@
                   }
               }
             %% Use the definite article of the original language, with name's casing correspond to the article
-            % \crefthe_patch_format:nnnnn { 2 } { #4 ref@ #1 @format } { #4 ref@ #1 @name }
+            % \crefthe_patch_format:nnnn { #4 ref@ #1 @format } { #4 ref@ #1 @name }
             %   { \tl_use:c { g_crthm_name_ #4 ref_article_singular_ #2 _ #3 _tl } }
             %   { \tl_use:c { g_crthm_name_ #4 ref_singular_ #2 _ #3 _tl } }
-            % \crefthe_patch_format:nnnnn { 2 } { #4 ref@ #1 @format@first } { #4 ref@ #1 @name@plural }
+            % \crefthe_patch_format:nnnn { #4 ref@ #1 @format@first } { #4 ref@ #1 @name@plural }
             %   { \tl_use:c { g_crthm_name_ #4 ref_article_plural_ #2 _ #3 _tl } }
             %   { \tl_use:c { g_crthm_name_ #4 ref_plural_ #2 _ #3 _tl } }
-            % \crefthe_patch_format:nnnnn { 3 } { #4 refrange@ #1 @format } { #4 ref@ #1 @name@plural }
+            % \crefthe_patch_format:nnnn { #4 refrange@ #1 @format } { #4 ref@ #1 @name@plural }
             %   { \tl_use:c { g_crthm_name_ #4 ref_article_plural_ #2 _ #3 _tl } }
             %   { \tl_use:c { g_crthm_name_ #4 ref_plural_ #2 _ #3 _tl } }
-            % \crefthe_patch_format:nnnnn { 3 } { #4 refrange@ #1 @format@first } { #4 ref@ #1 @name@plural }
+            % \crefthe_patch_format:nnnn { #4 refrange@ #1 @format@first } { #4 ref@ #1 @name@plural }
             %   { \tl_use:c { g_crthm_name_ #4 ref_article_plural_ #2 _ #3 _tl } }
             %   { \tl_use:c { g_crthm_name_ #4 ref_plural_ #2 _ #3 _tl } }
             %% Use the definite article of the current language, with name's casing correspond to the article
-            % \crefthe_patch_format:nnnnn { 2 } { #4 ref@ #1 @format } { #4 ref@ #1 @name }
+            % \crefthe_patch_format:nnnn { #4 ref@ #1 @format } { #4 ref@ #1 @name }
             %   { \tl_use:c { g_crthm_name_ #4 ref_article_singular_ #2 _ \languagename _tl } }
             %   { \tl_use:c { g_crthm_name_ #4 ref_singular_ #2 _ #3 _tl } }
-            % \crefthe_patch_format:nnnnn { 2 } { #4 ref@ #1 @format@first } { #4 ref@ #1 @name@plural }
+            % \crefthe_patch_format:nnnn { #4 ref@ #1 @format@first } { #4 ref@ #1 @name@plural }
             %   { \tl_use:c { g_crthm_name_ #4 ref_article_plural_ #2 _ \languagename _tl } }
             %   { \tl_use:c { g_crthm_name_ #4 ref_plural_ #2 _ #3 _tl } }
-            % \crefthe_patch_format:nnnnn { 3 } { #4 refrange@ #1 @format } { #4 ref@ #1 @name@plural }
+            % \crefthe_patch_format:nnnn { #4 refrange@ #1 @format } { #4 ref@ #1 @name@plural }
             %   { \tl_use:c { g_crthm_name_ #4 ref_article_plural_ #2 _ \languagename _tl } }
             %   { \tl_use:c { g_crthm_name_ #4 ref_plural_ #2 _ #3 _tl } }
-            % \crefthe_patch_format:nnnnn { 3 } { #4 refrange@ #1 @format@first } { #4 ref@ #1 @name@plural }
+            % \crefthe_patch_format:nnnn { #4 refrange@ #1 @format@first } { #4 ref@ #1 @name@plural }
             %   { \tl_use:c { g_crthm_name_ #4 ref_article_plural_ #2 _ \languagename _tl } }
             %   { \tl_use:c { g_crthm_name_ #4 ref_plural_ #2 _ #3 _tl } }
           }
