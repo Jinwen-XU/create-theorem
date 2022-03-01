@@ -89,8 +89,8 @@
 
 \title{\createtheorempackage{}\\\smallskip\itshape Initializing theorem-like environments with multilingual support}
 \author{Jinwen XU}
-\thanks{Corresponding to: \texttt{\createtheorempackage{} 2022/02/27}}
-\date{February 2022, in Paris}
+\thanks{Corresponding to: \texttt{\createtheorempackage{} 2022/03/01}}
+\date{March 2022, in Paris}
 
 \maketitle
 
@@ -208,7 +208,7 @@ Supported keys are:
 
 The syntax of \lstinline|\CreateTheorem| is as follows:
 \begin{code}
-\CreateTheorem{(*\meta{name of environment}*)}{(*\meta{key-value configuration}*)}
+\CreateTheorem{(*\meta{list of the name of environments}*)}{(*\meta{key-value configuration}*)}
 \end{code}
 
 Supported keys are:
@@ -265,7 +265,16 @@ Supported keys are:
 
 \medskip
 
-Please note that, by default, an normal environment \meta{env} and its starred relative \meta{env}\texttt{*} do not share the same set of names, for the sake of generality. However, with proper usage of \commandoption{create starred version} and \commandoption{copy existed}, you are already able to produce all of the following combinations that shares the same set of names: 1$)$ numbered \meta{env}, numbered \meta{env}\texttt{*} ; 2$)$ numbered \meta{env}, unnumbered \meta{env}\texttt{*} ; 3$)$ unnumbered \meta{env}, numbered \meta{env}\texttt{*} ; and 4$)$ unnumbered \meta{env}, unnumbered \meta{env}\texttt{*}. I left it as an easy exercise for you ;-)
+Please note that, by default, an normal environment \meta{env} and its starred relative \meta{env}\texttt{*} do \emph{not} share the same set of names, for the sake of generality. However, with proper usage of \commandoption{create starred version} and \commandoption{copy existed}, you are already able to produce all of the following combinations that shares the same set of names: 1$)$ numbered \meta{env}, numbered \meta{env}\texttt{*} ; 2$)$ numbered \meta{env}, unnumbered \meta{env}\texttt{*} ; 3$)$ unnumbered \meta{env}, numbered \meta{env}\texttt{*} ; and 4$)$ unnumbered \meta{env}, unnumbered \meta{env}\texttt{*}. I left it as an easy exercise for you ;-)
+
+% \subsection[Configuring theorem-like environments]{Configuring theorem-like environments with \texttt{\textbackslash\textcolor{maintheme}{SetTheorem}}}
+
+% Even after defining the environments, you can still configure them with \lstinline|\SetTheorem|. The syntax of which is as follows:
+
+% \begin{code}
+% \SetTheorem{(*\meta{list of the name of environments}*)}{(*\meta{key-value configuration}*)}
+% \end{code}
+
 
 \section{Examples}
 
@@ -319,7 +328,7 @@ Next we shall deal with the numbering problem. Let's continue to use this enviro
 
 \subsection{Let's play with numbering}
 
-Remember the exercise I left to you at the end of the previous section? Let's do this together.
+Remember the exercise I left you at the end of the previous section? Let's do it together now.
 
 \subsubsection{Numbered \texttt{idea} and numbered \texttt{idea*}}
 

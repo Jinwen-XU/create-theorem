@@ -13,7 +13,7 @@
 \RequirePackage{l3keys2e}
 \ProvidesExplPackage
   {create-theorem}
-  {2022/02/27} {}
+  {2022/03/01} {}
   {Initializing theorem-like environments with multilingual support}
 
 \keys_define:nn { create-theorem }
@@ -356,6 +356,11 @@
 
 \NewDocumentCommand \NameTheorem { m m }
   {
+    \crthm_name_theorem:nn { #1 } { #2 }
+  }
+
+\cs_new:Nn \crthm_name_theorem:nn
+  {
     \tl_set:Nn \l__crthm_current_env_tl { #1 }
     \newcounter { #1 }
     \keys_set:nn { create-theorem-naming } { #2 }
@@ -427,6 +432,14 @@
   }
 
 \NewDocumentCommand \CreateTheorem { m m }
+  {
+    \clist_map_inline:nn { #1 }
+      {
+        \crthm_create_theorem:nn { ##1 } { #2 }
+      }
+  }
+
+\cs_new:Nn \crthm_create_theorem:nn
   {
     \tl_set:Nn \l__crthm_current_env_tl { #1 }
     \bool_set_false:N \l__crthm_creating_apply_style_bool
