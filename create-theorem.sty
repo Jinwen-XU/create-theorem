@@ -145,7 +145,11 @@
   % #2 = language name
   % #3 = corresponding heading name
   {
-    \tl_gset:cn { g_crthm_name_heading_ #1 _ #2 _tl } { #3 }
+    \tl_if_exist:cF { g_crthm_style_heading_ #1 _ #2 _tl }
+      {
+        \tl_new:c { g_crthm_style_heading_ #1 _ #2 _tl }
+      }
+    \tl_gset:cn { g_crthm_name_heading_ #1 _ #2 _tl } { \tl_use:c { g_crthm_style_heading_ #1 _ #2 _tl } { #3 } }
   }
 
 \cs_new:Nn \crthm_set_name_crefname:nn
@@ -202,8 +206,14 @@
         \tl_gset:cn { g_crthm_name_ #7 ref_article_singular_ #1 _ #2 _tl } { \crefthemark { #3 } }
         \tl_gset:cn { g_crthm_name_ #7 ref_article_plural_ #1 _ #2 _tl } { \crefthemark { #5 } }
       }
-    \tl_gset:cn { g_crthm_name_ #7 ref_singular_ #1 _ #2 _tl } { #4 }
-    \tl_gset:cn { g_crthm_name_ #7 ref_plural_ #1 _ #2 _tl } { #6 }
+
+    \tl_if_exist:cF { g_crthm_style_ #7 refname_ #1 _ #2 _tl }
+      {
+        \tl_new:c { g_crthm_style_ #7 refname_ #1 _ #2 _tl }
+      }
+
+    \tl_gset:cn { g_crthm_name_ #7 ref_singular_ #1 _ #2 _tl } { \tl_use:c { g_crthm_style_ #7 refname_ #1 _ #2 _tl } { #4 } }
+    \tl_gset:cn { g_crthm_name_ #7 ref_plural_ #1 _ #2 _tl } { \tl_use:c { g_crthm_style_ #7 refname_ #1 _ #2 _tl } { #6 } }
 
     \bool_if:NTF \l__crthm_regionalref_bool
       {% "regionalref" mode
@@ -416,17 +426,6 @@
   }
 
 
-\cs_new_protected:Nn \crthm_add_text_style:Nn
-  {
-    \__crthm_add_text_style:Non #1 { #1 } { #2 }
-  }
-\cs_generate_variant:Nn \crthm_add_text_style:Nn { c }
-\cs_new_protected:Nn \__crthm_add_text_style:Nnn
-  {
-    \tl_gset:Nn #1 { #3 { #2 } }
-  }
-\cs_generate_variant:Nn \__crthm_add_text_style:Nnn { No }
-
 \cs_new:Nn \crthm_set_name_style_heading:nn
   % #1 = env name
   % #2 = the settings
@@ -440,7 +439,7 @@
   % #2 = language name
   % #3 = corresponding heading style
   {
-    \crthm_add_text_style:cn { g_crthm_name_heading_ #1 _ #2 _tl } { \normalfont #3 }
+    \tl_gset:cn { g_crthm_style_heading_ #1 _ #2 _tl } { \normalfont #3 }
   }
 
 \cs_new:Nn \crthm_set_name_style_crefname:nn
@@ -456,8 +455,7 @@
   % #2 = language name
   % #3 = corresponding crefname style
   {
-    \crthm_add_text_style:cn { g_crthm_name_cref_singular_ #1 _ #2 _tl } { \normalfont #3 }
-    \crthm_add_text_style:cn { g_crthm_name_cref_plural_ #1 _ #2 _tl } { \normalfont #3 }
+    \tl_gset:cn { g_crthm_style_crefname_ #1 _ #2 _tl } { \normalfont #3 }
   }
 
 \cs_new:Nn \crthm_set_name_style_Crefname:nn
@@ -473,8 +471,7 @@
   % #2 = language name
   % #3 = corresponding Crefname style
   {
-    \crthm_add_text_style:cn { g_crthm_name_Cref_singular_ #1 _ #2 _tl } { \normalfont #3 }
-    \crthm_add_text_style:cn { g_crthm_name_Cref_plural_ #1 _ #2 _tl } { \normalfont #3 }
+    \tl_gset:cn { g_crthm_style_Crefname_ #1 _ #2 _tl } { \normalfont #3 }
   }
 
 \cs_new:Nn \crthm_set_name_style_numbering:nn
