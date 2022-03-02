@@ -13,14 +13,11 @@
 \RequirePackage{l3keys2e}
 \ProvidesExplPackage
   {create-theorem}
-  {2022/03/02} {}
+  {2022/03/03} {}
   {Initializing theorem-like environments with multilingual support}
 
 \keys_define:nn { create-theorem }
   {
-    , draft                 .bool_set:N         = \l__crthm_fast_bool
-    , draft                 .initial:n          = { false }
-    , fast                  .bool_set:N         = \l__crthm_fast_bool
     , name-as-context       .bool_set:N         = \l__crthm_regionalref_bool
     , name-as-context       .initial:n          = { true }
     , name~as~context       .bool_set:N         = \l__crthm_regionalref_bool
@@ -85,34 +82,63 @@
 
 \keys_define:nn { create-theorem-naming }
   {
-    , heading      .code:n             = { \crthm_set_name_heading:ee { \l__crthm_current_env_tl } { #1 } }
-    , heading      .value_required:n   = true
-    , crefname     .code:n             = { \crthm_set_name_crefname:ee { \l__crthm_current_env_tl } { #1 } }
-    , crefname     .value_required:n   = true
-    , Crefname     .code:n             = { \crthm_set_name_Crefname:ee { \l__crthm_current_env_tl } { #1 } }
-    , Crefname     .value_required:n   = true
-    , unknown      .code:n             = {}
+    , heading               .code:n             = { \crthm_set_name_heading:en { \l__crthm_current_env_tl } { #1 } }
+    , heading               .value_required:n   = true
+    , crefname              .code:n             = { \crthm_set_name_crefname:en { \l__crthm_current_env_tl } { #1 } }
+    , crefname              .value_required:n   = true
+    , Crefname              .code:n             = { \crthm_set_name_Crefname:en { \l__crthm_current_env_tl } { #1 } }
+    , Crefname              .value_required:n   = true
+    , heading~style         .code:n             = { \crthm_set_name_style_heading:en { \l__crthm_current_env_tl } { #1 } }
+    , heading~style         .value_required:n   = true
+    , heading-style         .meta:n             = { heading~style = #1 }
+    , heading-style         .value_required:n   = true
+    , heading style         .meta:n             = { heading~style = #1 }
+    , heading style         .value_required:n   = true
+    , crefname~style        .code:n             = { \crthm_set_name_style_crefname:en { \l__crthm_current_env_tl } { #1 } }
+    , crefname~style        .value_required:n   = true
+    , crefname-style        .meta:n             = { crefname~style = #1 }
+    , crefname-style        .value_required:n   = true
+    , crefname style        .meta:n             = { crefname~style = #1 }
+    , crefname style        .value_required:n   = true
+    , Crefname~style        .code:n             = { \crthm_set_name_style_Crefname:en { \l__crthm_current_env_tl } { #1 } }
+    , Crefname~style        .value_required:n   = true
+    , Crefname-style        .meta:n             = { Crefname~style = #1 }
+    , Crefname-style        .value_required:n   = true
+    , Crefname style        .meta:n             = { Crefname~style = #1 }
+    , Crefname style        .value_required:n   = true
+    , numbering~style       .code:n             = { \crthm_set_name_style_numbering:en { \l__crthm_current_env_tl } { #1 } }
+    , numbering~style       .value_required:n   = true
+    , numbering-style       .meta:n             = { numbering~style = #1 }
+    , numbering-style       .value_required:n   = true
+    , numbering style       .meta:n             = { numbering~style = #1 }
+    , numbering style       .value_required:n   = true
+    , unknown               .code:n             = {}
+  }
+
+\cs_new:Nn \__crthm_set_generic:nnn
+  {
+    \str_if_in:nnTF { #2 } { = }
+      {% key-value definition
+        \keyval_parse:nnn
+          {}
+          { \use:c { __crthm_ #3 :nnn } { #1 } }
+          { #2 }
+      }
+      {% simple definition
+        \clist_map_inline:Nn \g_crthm_supported_language_clist
+          {
+            \use:c { __crthm_ #3 :nnn } { #1 } { ##1 } { #2 }
+          }
+      }
   }
 
 \cs_new:Nn \crthm_set_name_heading:nn
   % #1 = env name
   % #2 = the settings
   {
-    \str_if_in:nnTF { #2 } { = }
-      {% key-value definition
-        \keyval_parse:nnn
-          {}
-          { \__crthm_set_name_heading:nnn { #1 } }
-          { #2 }
-      }
-      {% simple definition
-        \clist_map_inline:Nn \g_crthm_supported_language_clist
-          {
-            \__crthm_set_name_heading:nnn { #1 } { ##1 } { #2 }
-          }
-      }
+    \__crthm_set_generic:nnn { #1 } { #2 } { set_name_heading }
   }
-\cs_generate_variant:Nn \crthm_set_name_heading:nn { ee }
+\cs_generate_variant:Nn \crthm_set_name_heading:nn { en }
 
 \cs_new:Nn \__crthm_set_name_heading:nnn
   % #1 = env name
@@ -128,7 +154,7 @@
   {
     \crthm_set_name_crefname_generic:nnn { #1 } { #2 } { c }
   }
-\cs_generate_variant:Nn \crthm_set_name_crefname:nn { ee }
+\cs_generate_variant:Nn \crthm_set_name_crefname:nn { en }
 
 \cs_new:Nn \crthm_set_name_Crefname:nn
   % #1 = env name
@@ -136,26 +162,14 @@
   {
     \crthm_set_name_crefname_generic:nnn { #1 } { #2 } { C }
   }
-\cs_generate_variant:Nn \crthm_set_name_Crefname:nn { ee }
+\cs_generate_variant:Nn \crthm_set_name_Crefname:nn { en }
 
 \cs_new:Nn \crthm_set_name_crefname_generic:nnn
   % #1 = env name
   % #2 = the settings
   % #3 = c or C
   {
-    \str_if_in:nnTF { #2 } { = }
-      {% key-value definition
-        \keyval_parse:nnn
-          {}
-          { \use:c { __crthm_set_name_ #3 refname:nnn } { #1 } }
-          { #2 }
-      }
-      {% simple definition
-        \clist_map_inline:Nn \g_crthm_supported_language_clist
-          {
-            \use:c { __crthm_set_name_ #3 refname:nnn } { #1 } { ##1 } { #2 }
-          }
-      }
+    \__crthm_set_generic:nnn { #1 } { #2 } { set_name_ #3 refname }
   }
 
 \cs_new:Nn \__crthm_set_name_crefname:nnn
@@ -181,8 +195,8 @@
   {
     \tl_if_blank:eTF { #3 }
       {
-        \tl_gset:cn { g_crthm_name_ #7 ref_article_singular_ #1 _ #2 _tl } { \crefthemark{ \!\!\! } }
-        \tl_gset:cn { g_crthm_name_ #7 ref_article_plural_ #1 _ #2 _tl } { \crefthemark{ \!\!\! } }
+        \tl_gset:cn { g_crthm_name_ #7 ref_article_singular_ #1 _ #2 _tl } { \crefthemark{ \skip_horizontal:n { -1ex } } }
+        \tl_gset:cn { g_crthm_name_ #7 ref_article_plural_ #1 _ #2 _tl } { \crefthemark{ \skip_horizontal:n { -1ex } } }
       }
       {
         \tl_gset:cn { g_crthm_name_ #7 ref_article_singular_ #1 _ #2 _tl } { \crefthemark { #3 } }
@@ -244,7 +258,8 @@
           }
       }
     \tl_gset:cn { #4 ref@ #1 @name@plural }
-      { % Use the definite article of the original language, with name's casing depends on the preposition and the article
+      { % Use the definite article of the original language,
+        % with name's casing depends on the preposition and the article
         \tl_use:c { g_crthm_name_ #4 ref_article_plural_ #2 _ #3 _tl }
         \bool_if:NTF \g__crefthe_has_prep_bool
           {
@@ -254,118 +269,230 @@
             \tl_use:c { g_crthm_name_ #4 ref_plural_ #2 _ #3 _tl }
           }
       }
-    %% Use the definite article of the original language, with name's casing correspond to the article
-    % \tl_gset:cn { #4 ref@ #1 @name }
-    %   {
-    %     \tl_use:c { g_crthm_name_ #4 ref_article_singular_ #2 _ #3 _tl }
-    %     \tl_use:c { g_crthm_name_ #4 ref_singular_ #2 _ #3 _tl }
-    %   }
-    % \tl_gset:cn { #4 ref@ #1 @name@plural }
-    %   {
-    %     \tl_use:c { g_crthm_name_ #4 ref_article_plural_ #2 _ #3 _tl }
-    %     \tl_use:c { g_crthm_name_ #4 ref_plural_ #2 _ #3 _tl }
-    %   }
-    %% Use the definite article of the current language, with name's casing correspond to the article
-    % \tl_gset:cn { #4 ref@ #1 @name }
-    %   {
-    %     \tl_use:c { g_crthm_name_ #4 ref_article_singular_ #2 _ \languagename _tl }
-    %     \tl_use:c { g_crthm_name_ #4 ref_singular_ #2 _ #3 _tl }
-    %   }
-    % \tl_gset:cn { #4 ref@ #1 @name@plural }
-    %   {
-    %     \tl_use:c { g_crthm_name_ #4 ref_article_plural_ #2 _ \languagename _tl }
-    %     \tl_use:c { g_crthm_name_ #4 ref_plural_ #2 _ #3 _tl }
-    %   }
 
     \seq_if_in:NnF \g__crthm_format_already_set_seq { #2 _ #3 }
       {
-        \bool_if:NTF \l__crthm_fast_bool
-          {
-            \@crefcopyformats { #2 _ #3 } { #1 }
-          }
-          {
-            \creflabelformat { #1 } { ##2 ##1 ##3 }
-          }
+        \@crefdefineallformats { #1 }
         \seq_gput_right:Nn \g__crthm_format_already_set_seq { #2 _ #3 }
       }
 
-    \bool_if:NF \l__crthm_fast_bool
-      { % Patch the cref formats so that definite articles are placed outside the hyperlinks
-        \bool_if:NT \l__crthm_nameinlink_bool
-          { % Use the definite article of the original language, with name's casing depends on the preposition and the article
-            \crefthe_patch_format:nnnn { #4 ref@ #1 @format } { #4 ref@ #1 @name }
-              { \tl_use:c { g_crthm_name_ #4 ref_article_singular_ #2 _ #3 _tl } }
-              {
-                \bool_if:NTF \g__crefthe_has_prep_bool
-                  {
-                    \tl_use:c { g_crthm_name_ cref_singular_ #2 _ #3 _tl }
-                  }
-                  {
-                    \tl_use:c { g_crthm_name_ #4 ref_singular_ #2 _ #3 _tl }
-                  }
-              }
-            \crefthe_patch_format:nnnn { #4 ref@ #1 @format@first } { #4 ref@ #1 @name@plural }
-              { \tl_use:c { g_crthm_name_ #4 ref_article_plural_ #2 _ #3 _tl } }
-              {
-                \bool_if:NTF \g__crefthe_has_prep_bool
-                  {
-                    \tl_use:c { g_crthm_name_ cref_plural_ #2 _ #3 _tl }
-                  }
-                  {
-                    \tl_use:c { g_crthm_name_ #4 ref_plural_ #2 _ #3 _tl }
-                  }
-              }
-            \crefthe_patch_format:nnnn { #4 refrange@ #1 @format } { #4 ref@ #1 @name@plural }
-              { \tl_use:c { g_crthm_name_ #4 ref_article_plural_ #2 _ #3 _tl } }
-              {
-                \bool_if:NTF \g__crefthe_has_prep_bool
-                  {
-                    \tl_use:c { g_crthm_name_ cref_plural_ #2 _ #3 _tl }
-                  }
-                  {
-                    \tl_use:c { g_crthm_name_ #4 ref_plural_ #2 _ #3 _tl }
-                  }
-              }
-            \crefthe_patch_format:nnnn { #4 refrange@ #1 @format@first } { #4 ref@ #1 @name@plural }
-              { \tl_use:c { g_crthm_name_ #4 ref_article_plural_ #2 _ #3 _tl } }
-              {
-                \bool_if:NTF \g__crefthe_has_prep_bool
-                  {
-                    \tl_use:c { g_crthm_name_ cref_plural_ #2 _ #3 _tl }
-                  }
-                  {
-                    \tl_use:c { g_crthm_name_ #4 ref_plural_ #2 _ #3 _tl }
-                  }
-              }
-            %% Use the definite article of the original language, with name's casing correspond to the article
-            % \crefthe_patch_format:nnnn { #4 ref@ #1 @format } { #4 ref@ #1 @name }
-            %   { \tl_use:c { g_crthm_name_ #4 ref_article_singular_ #2 _ #3 _tl } }
-            %   { \tl_use:c { g_crthm_name_ #4 ref_singular_ #2 _ #3 _tl } }
-            % \crefthe_patch_format:nnnn { #4 ref@ #1 @format@first } { #4 ref@ #1 @name@plural }
-            %   { \tl_use:c { g_crthm_name_ #4 ref_article_plural_ #2 _ #3 _tl } }
-            %   { \tl_use:c { g_crthm_name_ #4 ref_plural_ #2 _ #3 _tl } }
-            % \crefthe_patch_format:nnnn { #4 refrange@ #1 @format } { #4 ref@ #1 @name@plural }
-            %   { \tl_use:c { g_crthm_name_ #4 ref_article_plural_ #2 _ #3 _tl } }
-            %   { \tl_use:c { g_crthm_name_ #4 ref_plural_ #2 _ #3 _tl } }
-            % \crefthe_patch_format:nnnn { #4 refrange@ #1 @format@first } { #4 ref@ #1 @name@plural }
-            %   { \tl_use:c { g_crthm_name_ #4 ref_article_plural_ #2 _ #3 _tl } }
-            %   { \tl_use:c { g_crthm_name_ #4 ref_plural_ #2 _ #3 _tl } }
-            %% Use the definite article of the current language, with name's casing correspond to the article
-            % \crefthe_patch_format:nnnn { #4 ref@ #1 @format } { #4 ref@ #1 @name }
-            %   { \tl_use:c { g_crthm_name_ #4 ref_article_singular_ #2 _ \languagename _tl } }
-            %   { \tl_use:c { g_crthm_name_ #4 ref_singular_ #2 _ #3 _tl } }
-            % \crefthe_patch_format:nnnn { #4 ref@ #1 @format@first } { #4 ref@ #1 @name@plural }
-            %   { \tl_use:c { g_crthm_name_ #4 ref_article_plural_ #2 _ \languagename _tl } }
-            %   { \tl_use:c { g_crthm_name_ #4 ref_plural_ #2 _ #3 _tl } }
-            % \crefthe_patch_format:nnnn { #4 refrange@ #1 @format } { #4 ref@ #1 @name@plural }
-            %   { \tl_use:c { g_crthm_name_ #4 ref_article_plural_ #2 _ \languagename _tl } }
-            %   { \tl_use:c { g_crthm_name_ #4 ref_plural_ #2 _ #3 _tl } }
-            % \crefthe_patch_format:nnnn { #4 refrange@ #1 @format@first } { #4 ref@ #1 @name@plural }
-            %   { \tl_use:c { g_crthm_name_ #4 ref_article_plural_ #2 _ \languagename _tl } }
-            %   { \tl_use:c { g_crthm_name_ #4 ref_plural_ #2 _ #3 _tl } }
+    \tl_if_exist:cF { g_crthm_number_style_ #2 _tl }
+      {
+        \tl_new:c { g_crthm_number_style_ #2 _tl }
+      }
+
+    % Redefine the cref formats so that definite articles are placed outside the hyperlinks
+    \crthm_define_format_short_version:nnnn { #2 } { #4 ref@ #1 @format }
+      { \tl_use:c { g_crthm_name_ #4 ref_article_singular_ #2 _ #3 _tl } }
+      {
+        \bool_if:NTF \g__crefthe_has_prep_bool
+          {
+            \tl_use:c { g_crthm_name_ cref_singular_ #2 _ #3 _tl }
+          }
+          {
+            \tl_use:c { g_crthm_name_ #4 ref_singular_ #2 _ #3 _tl }
           }
       }
+    \crthm_define_format_short_version:nnnn { #2 } { #4 ref@ #1 @format@first }
+      { \tl_use:c { g_crthm_name_ #4 ref_article_plural_ #2 _ #3 _tl } }
+      {
+        \bool_if:NTF \g__crefthe_has_prep_bool
+          {
+            \tl_use:c { g_crthm_name_ cref_plural_ #2 _ #3 _tl }
+          }
+          {
+            \tl_use:c { g_crthm_name_ #4 ref_plural_ #2 _ #3 _tl }
+          }
+      }
+    \cs_set:cpn { #4 ref@ #1 @format@second } ##1##2##3
+      {
+        \crefpairconjunction
+        \crthm_format_short_generic:nnn { \tl_use:c { g_crthm_number_style_ #2 _tl } { ##1 } } { ##2 } { ##3 }
+      }
+    \cs_set:cpn { #4 ref@ #1 @format@middle } ##1##2##3
+      {
+        \crefmiddleconjunction
+        \crthm_format_short_generic:nnn { \tl_use:c { g_crthm_number_style_ #2 _tl } { ##1 } } { ##2 } { ##3 }
+      }
+    \cs_set:cpn { #4 ref@ #1 @format@last } ##1##2##3
+      {
+        \creflastconjunction
+        \crthm_format_short_generic:nnn { \tl_use:c { g_crthm_number_style_ #2 _tl } { ##1 } } { ##2 } { ##3 }
+      }
+
+    \crthm_define_format_long_version:nnnn { #2 } { #4 refrange@ #1 @format }
+      { \tl_use:c { g_crthm_name_ #4 ref_article_plural_ #2 _ #3 _tl } }
+      {
+        \bool_if:NTF \g__crefthe_has_prep_bool
+          {
+            \tl_use:c { g_crthm_name_ cref_plural_ #2 _ #3 _tl }
+          }
+          {
+            \tl_use:c { g_crthm_name_ #4 ref_plural_ #2 _ #3 _tl }
+          }
+      }
+    \crthm_define_format_long_version:nnnn { #2 } { #4 refrange@ #1 @format@first }
+      { \tl_use:c { g_crthm_name_ #4 ref_article_plural_ #2 _ #3 _tl } }
+      {
+        \bool_if:NTF \g__crefthe_has_prep_bool
+          {
+            \tl_use:c { g_crthm_name_ cref_plural_ #2 _ #3 _tl }
+          }
+          {
+            \tl_use:c { g_crthm_name_ #4 ref_plural_ #2 _ #3 _tl }
+          }
+      }
+    \cs_set:cpn { #4 refrange@ #1 @format@second } ##1##2##3##4##5##6
+      {
+        \crefpairconjunction
+        \crthm_format_long_generic:nnnnnn
+          { \tl_use:c { g_crthm_number_style_ #2 _tl } { ##1 } }
+          { \tl_use:c { g_crthm_number_style_ #2 _tl } { ##2 } }
+          { ##3 } { ##4 } { ##5 } { ##6 }
+      }
+    \cs_set:cpn { #4 refrange@ #1 @format@middle } ##1##2##3##4##5##6
+      {
+        \crefmiddleconjunction
+        \crthm_format_long_generic:nnnnnn
+          { \tl_use:c { g_crthm_number_style_ #2 _tl } { ##1 } }
+          { \tl_use:c { g_crthm_number_style_ #2 _tl } { ##2 } }
+          { ##3 } { ##4 } { ##5 } { ##6 }
+      }
+    \cs_set:cpn { #4 refrange@ #1 @format@last } ##1##2##3##4##5##6
+      {
+        \creflastconjunction
+        \crthm_format_long_generic:nnnnnn
+          { \tl_use:c { g_crthm_number_style_ #2 _tl } { ##1 } }
+          { \tl_use:c { g_crthm_number_style_ #2 _tl } { ##2 } }
+          { ##3 } { ##4 } { ##5 } { ##6 }
+      }
   }
+
+\cs_new:Nn \crthm_define_format_short_version:nnnn
+  { % #1 = name of the environment
+    % #2 = name of the format command
+    % #3 = content before the hyperlink beginning mark
+    % #4 = content after the hyperlink beginning mark
+    \cs_if_exist:cF { crthm_format_ #2 :nnn }
+      {
+        \cs_new:cn { crthm_format_ #2 :nnn }
+          {
+            #3 ##2 #4 \nobreakspace { \tl_use:c { g_crthm_number_style_ #1 _tl } { ##1 } } ##3
+          }
+        \cs_set_eq:cc { #2 } { crthm_format_ #2 :nnn }
+      }
+  }
+\cs_new:Nn \crthm_define_format_long_version:nnnn
+  { % #1 = name of the environment
+    % #2 = name of the format command
+    % #3 = content before the hyperlink beginning mark
+    % #4 = content after the hyperlink beginning mark
+    \cs_if_exist:cF { crthm_format_ #2 :nnnnnn }
+      {
+        \cs_new:cn { crthm_format_ #2 :nnnnnn }
+          {
+            #3 ##3 #4
+            \nobreakspace \crefrangepreconjunction
+            { \tl_use:c { g_crthm_number_style_ #1 _tl } { ##1 } }
+            ##4 \crefrangeconjunction
+            ##5 { \tl_use:c { g_crthm_number_style_ #1 _tl } { ##2 } } ##6
+            \crefrangepostconjunction
+          }
+        \cs_set_eq:cc { #2 } { crthm_format_ #2 :nnnnnn }
+      }
+  }
+
+\cs_new:Nn \crthm_format_short_generic:nnn
+  {
+    #2 { #1 } #3
+  }
+\cs_new:Nn \crthm_format_long_generic:nnnnnn
+  {
+    \crefrangepreconjunction
+    #3 { #1 } #4
+    \crefrangeconjunction
+    #5 { #2 } #6
+    \crefrangepostconjunction
+  }
+
+
+\cs_new_protected:Nn \crthm_add_text_style:Nn
+  {
+    \__crthm_add_text_style:Non #1 { #1 } { #2 }
+  }
+\cs_generate_variant:Nn \crthm_add_text_style:Nn { c }
+\cs_new_protected:Nn \__crthm_add_text_style:Nnn
+  {
+    \tl_gset:Nn #1 { #3 { #2 } }
+  }
+\cs_generate_variant:Nn \__crthm_add_text_style:Nnn { No }
+
+\cs_new:Nn \crthm_set_name_style_heading:nn
+  % #1 = env name
+  % #2 = the settings
+  {
+    \__crthm_set_generic:nnn { #1 } { #2 } { set_name_style_heading }
+  }
+\cs_generate_variant:Nn \crthm_set_name_style_heading:nn { en }
+
+\cs_new:Nn \__crthm_set_name_style_heading:nnn
+  % #1 = env name
+  % #2 = language name
+  % #3 = corresponding heading style
+  {
+    \crthm_add_text_style:cn { g_crthm_name_heading_ #1 _ #2 _tl } { \normalfont #3 }
+  }
+
+\cs_new:Nn \crthm_set_name_style_crefname:nn
+  % #1 = env name
+  % #2 = the settings
+  {
+    \__crthm_set_generic:nnn { #1 } { #2 } { set_name_style_crefname }
+  }
+\cs_generate_variant:Nn \crthm_set_name_style_crefname:nn { en }
+
+\cs_new:Nn \__crthm_set_name_style_crefname:nnn
+  % #1 = env name
+  % #2 = language name
+  % #3 = corresponding crefname style
+  {
+    \crthm_add_text_style:cn { g_crthm_name_cref_singular_ #1 _ #2 _tl } { \normalfont #3 }
+    \crthm_add_text_style:cn { g_crthm_name_cref_plural_ #1 _ #2 _tl } { \normalfont #3 }
+  }
+
+\cs_new:Nn \crthm_set_name_style_Crefname:nn
+  % #1 = env name
+  % #2 = the settings
+  {
+    \__crthm_set_generic:nnn { #1 } { #2 } { set_name_style_Crefname }
+  }
+\cs_generate_variant:Nn \crthm_set_name_style_Crefname:nn { en }
+
+\cs_new:Nn \__crthm_set_name_style_Crefname:nnn
+  % #1 = env name
+  % #2 = language name
+  % #3 = corresponding Crefname style
+  {
+    \crthm_add_text_style:cn { g_crthm_name_Cref_singular_ #1 _ #2 _tl } { \normalfont #3 }
+    \crthm_add_text_style:cn { g_crthm_name_Cref_plural_ #1 _ #2 _tl } { \normalfont #3 }
+  }
+
+\cs_new:Nn \crthm_set_name_style_numbering:nn
+  % #1 = env name
+  % #2 = the settings
+  {
+    \__crthm_set_generic:nnn { #1 } { #2 } { set_name_style_numbering }
+  }
+\cs_generate_variant:Nn \crthm_set_name_style_numbering:nn { en }
+
+\cs_new:Nn \__crthm_set_name_style_numbering:nnn
+  % #1 = env name
+  % #2 = language name
+  % #3 = corresponding numbering style
+  {
+    \tl_gset:cn { g_crthm_number_style_ #1 _tl } { #3 }
+  }
+
 
 \NewDocumentCommand \NameTheorem { m m }
   {
@@ -375,9 +502,13 @@
 \cs_new:Nn \crthm_name_theorem:nn
   {
     \tl_set:Nn \l__crthm_current_env_tl { #1 }
-    \newcounter { #1 }
+    \cs_if_exist:cF { c@ #1 }
+      {
+        \newcounter { #1 }
+      }
     \keys_set:nn { create-theorem-naming } { #2 }
   }
+
 
 \bool_new:N \l__crthm_creating_apply_style_bool
 \tl_new:N   \l__crthm_creating_apply_style_tl
@@ -389,6 +520,12 @@
   {
     , name                        .code:n             = { \exp_args:Ne \NameTheorem { \l__crthm_current_env_tl } { #1 } }
     , name                        .value_required:n   = true
+    , name~style                  .code:n             = { \exp_args:Ne \NameTheorem { \l__crthm_current_env_tl } { #1 } }
+    , name~style                  .value_required:n   = true
+    , name-style                  .meta:n             = { name~style = #1 }
+    , name-style                  .value_required:n   = true
+    , name style                  .meta:n             = { name~style = #1 }
+    , name style                  .value_required:n   = true
     , style                       .code:n             = { \bool_set_true:N \l__crthm_creating_apply_style_bool
                                                           \tl_set:Nn \l__crthm_creating_apply_style_tl { #1 }  }
     , style                       .value_required:n   = true
@@ -417,7 +554,7 @@
 
 \keys_define:nn { create-theorem-creating / counter-management }
   {
-    , parent~counter              .code:n             = { \crthm_counter_within:ee { \l__crthm_current_env_tl } { #1 } }
+    , parent~counter              .code:n             = { \crthm_counter_within:en { \l__crthm_current_env_tl } { #1 } }
     , parent~counter              .value_required:n   = true
     , parent-counter              .meta:n             = { parent~counter = #1 }
     , parent-counter              .value_required:n   = true
@@ -429,7 +566,7 @@
     , number-within               .value_required:n   = true
     , number within               .meta:n             = { parent~counter = #1 }
     , number within               .value_required:n   = true
-    , shared~counter              .code:n             = { \crthm_counter_alias:ee { \l__crthm_current_env_tl } { #1 } }
+    , shared~counter              .code:n             = { \crthm_counter_alias:en { \l__crthm_current_env_tl } { #1 } }
     , shared~counter              .value_required:n   = true
     , shared-counter              .meta:n             = { shared~counter = #1 }
     , shared-counter              .value_required:n   = true
@@ -443,6 +580,7 @@
     , number like                 .value_required:n   = true
     , unknown                     .code:n             = {}
   }
+
 
 \NewDocumentCommand \CreateTheorem { m m }
   {
@@ -462,10 +600,10 @@
     \keys_set:nn { create-theorem-creating } { #2 }
     \bool_if:NTF \l__crthm_creating_copy_existed_bool
       {
-        \__crthm_define_env:ee { #1 } { \l__crthm_creating_copy_existed_tl }
+        \__crthm_define_env:en { #1 } { \l__crthm_creating_copy_existed_tl }
         \bool_if:NT \l__crthm_creating_create_starred_bool
           {
-            \__crthm_define_env:ee { #1 * } { \l__crthm_creating_copy_existed_tl * }
+            \__crthm_define_env:en { #1 * } { \l__crthm_creating_copy_existed_tl * }
           }
       }
       {
@@ -515,20 +653,68 @@
     \cs_set_eq:cc { #1 } { #2 }
     \cs_set_eq:cc { end #1 } { end #2 }
   }
-\cs_generate_variant:Nn \__crthm_define_env:nn { ee }
+\cs_generate_variant:Nn \__crthm_define_env:nn { en }
 
 \cs_new:Nn \crthm_counter_within:nn
   {
     \counterwithin { #1 } { #2 }
   }
-\cs_generate_variant:Nn \crthm_counter_within:nn { ee }
+\cs_generate_variant:Nn \crthm_counter_within:nn { en }
 
 \cs_new:Nn \crthm_counter_alias:nn
   {
     \cs_set_eq:cc { c@ #1 } { c@ #2 }
     \cs_set_eq:cc { the #1 } { the #2 }
   }
-\cs_generate_variant:Nn \crthm_counter_alias:nn { ee }
+\cs_generate_variant:Nn \crthm_counter_alias:nn { en }
+
+
+\keys_define:nn { create-theorem-setting }
+  {
+    , name                        .code:n             = { \exp_args:Ne \NameTheorem { \l__crthm_current_env_tl } { #1 } }
+    , name                        .value_required:n   = true
+    , name~style                  .code:n             = { \exp_args:Ne \NameTheorem { \l__crthm_current_env_tl } { #1 } }
+    , name~style                  .value_required:n   = true
+    , name-style                  .meta:n             = { name~style = #1 }
+    , name-style                  .value_required:n   = true
+    , name style                  .meta:n             = { name~style = #1 }
+    , name style                  .value_required:n   = true
+    , parent~counter              .code:n             = { \crthm_counter_within:en { \l__crthm_current_env_tl } { #1 } }
+    , parent~counter              .value_required:n   = true
+    , parent-counter              .meta:n             = { parent~counter = #1 }
+    , parent-counter              .value_required:n   = true
+    , parent counter              .meta:n             = { parent~counter = #1 }
+    , parent counter              .value_required:n   = true
+    , number~within               .meta:n             = { parent~counter = #1 }
+    , number~within               .value_required:n   = true
+    , number-within               .meta:n             = { parent~counter = #1 }
+    , number-within               .value_required:n   = true
+    , number within               .meta:n             = { parent~counter = #1 }
+    , number within               .value_required:n   = true
+    , shared~counter              .code:n             = { \crthm_counter_alias:en { \l__crthm_current_env_tl } { #1 } }
+    , shared~counter              .value_required:n   = true
+    , shared-counter              .meta:n             = { shared~counter = #1 }
+    , shared-counter              .value_required:n   = true
+    , shared counter              .meta:n             = { shared~counter = #1 }
+    , shared counter              .value_required:n   = true
+    , number~like                 .meta:n             = { shared~counter = #1 }
+    , number~like                 .value_required:n   = true
+    , number-like                 .meta:n             = { shared~counter = #1 }
+    , number-like                 .value_required:n   = true
+    , number like                 .meta:n             = { shared~counter = #1 }
+    , number like                 .value_required:n   = true
+    , unknown                     .code:n             = {}
+  }
+
+
+\NewDocumentCommand \SetTheorem { m m }
+  {
+    \clist_map_inline:nn { #1 }
+      {
+        \tl_set:Nn \l__crthm_current_env_tl { ##1 }
+        \keys_set:nn { create-theorem-setting } { #2 }
+      }
+  }
 
 
 \bool_if:NF \l__crthm_presetname_bool { \endinput }

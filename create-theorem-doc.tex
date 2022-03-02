@@ -5,10 +5,6 @@
 
 \usepackage{ProjLib}
 
-\makeatletter
-\pretocmd{\@maketitle}{\vspace*{-2.5\baselineskip}}{}{}
-\makeatother
-
 %%================================
 %% For typesetting code
 %%================================
@@ -41,7 +37,9 @@
         Crefthe,Crefthename,
         selectlanguage,
         theoremstyle,
-        NameTheorem, CreateTheorem,
+        NameTheorem,
+        CreateTheorem,
+        SetTheorem,
         regexpatchcmd,
     }
 }
@@ -89,14 +87,14 @@
 
 \title{\createtheorempackage{}\\\smallskip\itshape Initializing theorem-like environments with multilingual support}
 \author{Jinwen XU}
-\thanks{Corresponding to: \texttt{\createtheorempackage{} 2022/03/01}}
+\thanks{Corresponding to: \texttt{\createtheorempackage{} 2022/03/03}}
 \date{March 2022, in Paris}
 
 \maketitle
 
 \begin{abstract}
     \raggedleft
-    The package \createtheorempackage{} provides the commands \lstinline|\NameTheorem| and \lstinline|\CreateTheorem| for naming and initializing theorem-like environments. They both have key-value based interface and are especially useful in multi-language documents, allowing you to easily declare theorem-like environments that automatically adapt to the language settings.
+    The package \createtheorempackage{} provides commands for naming, initializing and configuring theorem-like environments. All of these commands have key-value based interface and \\are especially useful in multi-language documents, allowing the easy declaration of \\theorem-like environments that can automatically adapt to the language settings.
 \end{abstract}
 
 \vspace{-.5\baselineskip}
@@ -117,12 +115,13 @@ First, you need a backend to provide the command \lstinline|\newtheorem| with th
     Since \createtheorempackage{} uses \textsf{cleveref} internally, it should usually be placed near the last of your preamble --- notably, it needs to be loaded after \textsf{varioref} and \textsf{hyperref}.
 \end{tip}
 
+\medskip
 It has the following options:
 \begin{itemize}
-    \item \packageoption{draft} or \packageoption{fast}
-        \begin{itemize}
-            \item Fast mode. The functionality will be appropriately reduced to get faster compilation speed, recommended to use during the writing stage.
-        \end{itemize}
+    % \item \packageoption{draft} or \packageoption{fast}
+    %     \begin{itemize}
+    %         \item Fast mode. The functionality will be appropriately reduced to get faster compilation speed, recommended to use during the writing stage.
+    %     \end{itemize}
     \item \packageoption{name as context}
         \begin{itemize}
             \item When referencing, the names correspond to the current language context. For example, the English names will be displayed when referencing a theorem-like environment in English context, no matter which language context the original environment is in.
@@ -170,6 +169,11 @@ Supported keys are:
 \end{code}
             \end{itemize}
         \end{itemize}
+    \item \commandoption{heading style}\lstinline| = |\meta{style}
+        \begin{itemize}
+            \item The style of the heading, you can specify the font, text style, color, etc.
+            \item Synonymous names: \commandoption{heading-style} \,$|$\, \commandoption{headingstyle}
+        \end{itemize}
     \item \commandoption{crefname}\lstinline| = |\meta{configuration}
         \begin{itemize}
             \item The name for \lstinline|\cref| the environment, where \meta{configuration} can be:
@@ -187,13 +191,29 @@ Supported keys are:
 [(*\meta{singular definite article}*)]{(*\meta{singular name}*)}[(*\meta{plural definite article}*)]{(*\meta{plural name}*)}
 \end{code}
         \end{itemize}
+    \item \commandoption{crefname style}\lstinline| = |\meta{style}
+        \begin{itemize}
+            \item The style of the ``crefname'', you can specify the font, text style, color, etc.
+            \item Synonymous names: \commandoption{crefname-style} \,$|$\, \commandoption{crefnamestyle}
+        \end{itemize}
     \item \commandoption{Crefname}
         \begin{itemize}
             \item The name for \lstinline|\Cref| the environment, its syntax is the same as that of \commandoption{crefname}.
             \item Also supports the syntax of \lstinline|\Crefthename|.
         \end{itemize}
+    \item \commandoption{Crefname style}\lstinline| = |\meta{style}
+        \begin{itemize}
+            \item The style of the ``Crefname'', you can specify the font, text style, color, etc.
+            \item Synonymous names: \commandoption{Crefname-style} \,$|$\, \commandoption{Crefnamestyle}
+        \end{itemize}
+    \item \commandoption{numbering style}\lstinline| = |\meta{style}
+        \begin{itemize}
+            \item The style of numbering in the reference, you can specify the font, text style, color, etc.
+            \item Synonymous names: \commandoption{numbering-style} \,$|$\, \commandoption{numberingstyle}
+        \end{itemize}
 \end{itemize}
 
+\medskip
 \begin{center}
     \itshape
     If you're feeling confused, don't worry, there is an Examples section later illustrating its usage.
@@ -216,7 +236,12 @@ Supported keys are:
 \begin{itemize}
     \item \commandoption{name}\lstinline| = |\meta{configuration}
         \begin{itemize}
-            \item Same as \lstinline|\NameTheorem{|\meta{name of environment}\lstinline|}{|\meta{configuration}\lstinline|}|.
+            \item Setting the names. Same as \lstinline|\NameTheorem{|\meta{name of environment}\lstinline|}{|\meta{configuration}\lstinline|}|.
+        \end{itemize}
+    \item \commandoption{name style}\lstinline| = |\meta{configuration}
+        \begin{itemize}
+            \item Setting the style of names. Same as using \lstinline|\NameTheorem|.
+            \item Synonymous names: \commandoption{name-style} \,$|$\, \commandoption{namestyle}
         \end{itemize}
     \item \commandoption{style}\lstinline| = |\meta{theorem style}
         \begin{itemize}
@@ -256,24 +281,53 @@ Supported keys are:
 
 \begin{center}
     \itshape
-    If you're feeling confused, don't worry, check out the Examples section below.
+    If you're feeling confused, don't worry, there is an Examples section later illustrating its usage.
 \end{center}
 
 \begin{tip}
-    The names for the following environments have been preset: \texttt{assertion}, \texttt{assumption}, \texttt{axiom}, \texttt{conclusion}, \texttt{conjecture}, \texttt{convention}, \texttt{corollary}, \texttt{definition}, \texttt{example}, \texttt{exercise}, \texttt{fact}, \texttt{hypothesis}, \texttt{lemma}, \texttt{notation}, \texttt{observation}, \texttt{postulate}, \texttt{problem}, \texttt{property}, \texttt{proposition}, \texttt{question}, \texttt{remark} and \texttt{theorem}. If you are fine with the preset names, then you don't need to specify the key ``\commandoption{name}'' while creating them, otherwise you shall have to use the package option ``\packageoption{no preset names}'' to disable the presets and define your own ones.
+    The names for the following environments have been preset: \texttt{assertion}, \texttt{assumption}, \texttt{axiom}, \texttt{conclusion}, \texttt{conjecture}, \texttt{convention}, \texttt{corollary}, \texttt{definition}, \texttt{example}, \texttt{exercise}, \texttt{fact}, \texttt{hypothesis}, \texttt{lemma}, \texttt{notation}, \texttt{observation}, \texttt{postulate}, \texttt{problem}, \texttt{property}, \texttt{proposition}, \texttt{question}, \texttt{remark} and \texttt{theorem}. If you are fine with the preset names, then you don't need to specify the key ``\commandoption{name}'' while creating them, otherwise you shall have to use the package option ``\packageoption{no preset names}'' to disable the presets and then define your own ones.
 \end{tip}
 
 \medskip
 
 Please note that, by default, an normal environment \meta{env} and its starred relative \meta{env}\texttt{*} do \emph{not} share the same set of names, for the sake of generality. However, with proper usage of \commandoption{create starred version} and \commandoption{copy existed}, you are already able to produce all of the following combinations that shares the same set of names: 1$)$ numbered \meta{env}, numbered \meta{env}\texttt{*} ; 2$)$ numbered \meta{env}, unnumbered \meta{env}\texttt{*} ; 3$)$ unnumbered \meta{env}, numbered \meta{env}\texttt{*} ; and 4$)$ unnumbered \meta{env}, unnumbered \meta{env}\texttt{*}. I left it as an easy exercise for you ;-)
 
-% \subsection[Configuring theorem-like environments]{Configuring theorem-like environments with \texttt{\textbackslash\textcolor{maintheme}{SetTheorem}}}
 
-% Even after defining the environments, you can still configure them with \lstinline|\SetTheorem|. The syntax of which is as follows:
+\bigskip
+\subsection[Configuring theorem-like environments]{Configuring theorem-like environments with \texttt{\textbackslash\textcolor{maintheme}{SetTheorem}}}
 
-% \begin{code}
-% \SetTheorem{(*\meta{list of the name of environments}*)}{(*\meta{key-value configuration}*)}
-% \end{code}
+The previous two commands are especially useful for package or class writers, while this one is more for the users. If you are not satisfied with preset name styles or numbering settings, then even after initializing the environments, you can still further configure them by means of \lstinline|\SetTheorem|, the syntax of which is as follows:
+
+\begin{code}
+\SetTheorem{(*\meta{list of the name of environments}*)}{(*\meta{key-value configuration}*)}
+\end{code}
+
+\begin{tip}
+    \lstinline|\SetTheorem| should only be used in the preamble of your document.
+\end{tip}
+
+Supported keys are:
+\vspace{-.2\baselineskip}
+\begin{itemize}
+    \item \commandoption{name style}\lstinline| = |\meta{configuration}
+        \begin{itemize}
+            \item Same as \lstinline|\NameTheorem{|\meta{name of environment}\lstinline|}{|\meta{configuration}\lstinline|}|.
+            \item Note that this configuration can overwrite those already specified in \lstinline|\NameTheorem|.
+            \item Synonymous names: \commandoption{name-style} \,$|$\, \commandoption{namestyle}
+        \end{itemize}
+    \item \commandoption{parent counter}\lstinline| = |\meta{parent counter}
+        \begin{itemize}
+            \item Specifying the \meta{parent counter} for the current environment, \emph{i.e.}, numbering will restart whenever that sectional level is encountered.
+            \item Note that this configuration can overwrite those already specified in \lstinline|\CreateTheorem|.
+            \item Synonymous names: \commandoption{parent-counter} \,$|$\, \commandoption{parentcounter} \,$|$\, \\\phantom{Synonymous names: }\commandoption{number within} \,$|$\, \commandoption{number-within} \,$|$\, \commandoption{numberwithin}
+        \end{itemize}
+    \item \commandoption{shared counter}\lstinline| = |\meta{shared counter}
+        \begin{itemize}
+            \item Specifying the \meta{shared counter} for the current environment, \emph{i.e.}, numbering will progress sequentially for all theorem-like environments using this counter.
+            \item Note that this configuration can overwrite those already specified in \lstinline|\CreateTheorem|.
+            \item Synonymous names: \commandoption{shared-counter} \,$|$\, \commandoption{sharedcounter} \,$|$\, \\\phantom{Synonymous names: }\commandoption{number like} \,$|$\, \commandoption{number-like} \,$|$\, \commandoption{numberlike}
+        \end{itemize}
+\end{itemize}
 
 
 \section{Examples}
@@ -288,7 +342,7 @@ First, let's getting familiar with these two commands by creating the environmen
     (*\commandoption{crefname}*) = {idea}{ideas},
     (*\commandoption{Crefname}*) = {Idea}{Ideas},
 }
-\CreateTheorem{idea}{ parent counter = section }
+\CreateTheorem{idea}{ (*\commandoption{parent counter}*) = section }
 \end{code}
 
 or to do it in one turn:
@@ -328,7 +382,7 @@ Next we shall deal with the numbering problem. Let's continue to use this enviro
 
 \subsection{Let's play with numbering}
 
-Remember the exercise I left you at the end of the previous section? Let's do it together now.
+Remember the exercise I left you in the previous section? Let's do it together now.
 
 \subsubsection{Numbered \texttt{idea} and numbered \texttt{idea*}}
 

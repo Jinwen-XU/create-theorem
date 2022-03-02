@@ -2,7 +2,7 @@
 
 # `create-theorem` - Initializing theorem-like environments with multilingual support
 
-The package `create-theorem` provides the commands `\NameTheorem` and `\CreateTheorem` for naming and initializing theorem-like environments. They both have key-value based interface and are especially useful in multi-language documents, allowing you to easily declare theorem-like environments that automatically adapt to the language settings.
+The package `create-theorem` provides the commands `\NameTheorem`, `\CreateTheorem` and `\SetTheorem` for naming, initializing and configuring theorem-like environments. All of these commands have key-value based interface and are especially useful in multi-language documents, allowing the easy declaration of theorem-like environments that can automatically adapt to the language settings.
 
 *For more information, please refer to its documentation.*
 
