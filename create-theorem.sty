@@ -546,6 +546,8 @@
     , copy-existed                .value_required:n   = true
     , copy existed                .meta:n             = { copy~existed = #1 }
     , copy existed                .value_required:n   = true
+    , quiet                       .bool_set:N         = \l__crthm_creating_quiet_bool
+    , quiet                       .initial:n          = { false }
     , unknown                     .code:n             = {}
   }
 
@@ -587,7 +589,25 @@
       }
   }
 
+\msg_new:nnn { create-theorem }
+  { env-not-created }
+  { The~theorem-like~environment~"#1"~cannot~be~created,~an~environment~with~the~same~name~has~already~existed. }
+
 \cs_new:Nn \crthm_create_theorem:nn
+  {
+    \cs_if_exist:cTF { #1 }
+      {
+        \bool_if:NF \l__crthm_creating_quiet_bool
+          {
+            \msg_warning:nnn  { create-theorem } { env-not-created } { #1 }
+          }
+      }
+      {
+        \__crthm_create_theorem:nn { #1 } { #2 }
+      }
+  }
+
+\cs_new:Nn \__crthm_create_theorem:nn
   {
     \tl_set:Nn \l__crthm_current_env_tl { #1 }
     \bool_set_false:N \l__crthm_creating_apply_style_bool
