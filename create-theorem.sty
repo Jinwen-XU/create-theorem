@@ -90,27 +90,27 @@
     , Crefname              .value_required:n   = true
     , heading~style         .code:n             = { \crthm_set_name_style_heading:en { \l__crthm_current_env_tl } { #1 } }
     , heading~style         .value_required:n   = true
-    , heading-style         .meta:n             = { heading~style = #1 }
+    , heading-style         .meta:n             = { heading~style = { #1 } }
     , heading-style         .value_required:n   = true
-    , heading style         .meta:n             = { heading~style = #1 }
+    , heading style         .meta:n             = { heading~style = { #1 } }
     , heading style         .value_required:n   = true
     , crefname~style        .code:n             = { \crthm_set_name_style_crefname:en { \l__crthm_current_env_tl } { #1 } }
     , crefname~style        .value_required:n   = true
-    , crefname-style        .meta:n             = { crefname~style = #1 }
+    , crefname-style        .meta:n             = { crefname~style = { #1 } }
     , crefname-style        .value_required:n   = true
-    , crefname style        .meta:n             = { crefname~style = #1 }
+    , crefname style        .meta:n             = { crefname~style = { #1 } }
     , crefname style        .value_required:n   = true
     , Crefname~style        .code:n             = { \crthm_set_name_style_Crefname:en { \l__crthm_current_env_tl } { #1 } }
     , Crefname~style        .value_required:n   = true
-    , Crefname-style        .meta:n             = { Crefname~style = #1 }
+    , Crefname-style        .meta:n             = { Crefname~style = { #1 } }
     , Crefname-style        .value_required:n   = true
-    , Crefname style        .meta:n             = { Crefname~style = #1 }
+    , Crefname style        .meta:n             = { Crefname~style = { #1 } }
     , Crefname style        .value_required:n   = true
     , numbering~style       .code:n             = { \crthm_set_name_style_numbering:en { \l__crthm_current_env_tl } { #1 } }
     , numbering~style       .value_required:n   = true
-    , numbering-style       .meta:n             = { numbering~style = #1 }
+    , numbering-style       .meta:n             = { numbering~style = { #1 } }
     , numbering-style       .value_required:n   = true
-    , numbering style       .meta:n             = { numbering~style = #1 }
+    , numbering style       .meta:n             = { numbering~style = { #1 } }
     , numbering style       .value_required:n   = true
     , unknown               .code:n             = {}
   }
@@ -531,18 +531,18 @@
     , name                        .value_required:n   = true
     , name~style                  .code:n             = { \exp_args:Ne \NameTheorem { \l__crthm_current_env_tl } { #1 } }
     , name~style                  .value_required:n   = true
-    , name-style                  .meta:n             = { name~style = #1 }
+    , name-style                  .meta:n             = { name~style = { #1 } }
     , name-style                  .value_required:n   = true
-    , name style                  .meta:n             = { name~style = #1 }
+    , name style                  .meta:n             = { name~style = { #1 } }
     , name style                  .value_required:n   = true
     , style                       .code:n             = { \bool_set_true:N \l__crthm_creating_apply_style_bool
                                                           \tl_set:Nn \l__crthm_creating_apply_style_tl { #1 }  }
     , style                       .value_required:n   = true
-    , apply~style                 .meta:n             = { style = #1 }
+    , apply~style                 .meta:n             = { style = { #1 } }
     , apply~style                 .value_required:n   = true
-    , apply-style                 .meta:n             = { style = #1 }
+    , apply-style                 .meta:n             = { style = { #1 } }
     , apply-style                 .value_required:n   = true
-    , apply style                 .meta:n             = { style = #1 }
+    , apply style                 .meta:n             = { style = { #1 } }
     , apply style                 .value_required:n   = true
     , numberless                  .bool_set:N         = \l__crthm_creating_numberless_bool
     , create~starred~version      .bool_set:N         = \l__crthm_creating_create_starred_bool
@@ -554,9 +554,9 @@
     , copy~existed                .code:n             = { \bool_set_true:N \l__crthm_creating_copy_existed_bool
                                                           \tl_set:Nn \l__crthm_creating_copy_existed_tl { #1 }  }
     , copy~existed                .value_required:n   = true
-    , copy-existed                .meta:n             = { copy~existed = #1 }
+    , copy-existed                .meta:n             = { copy~existed = { #1 } }
     , copy-existed                .value_required:n   = true
-    , copy existed                .meta:n             = { copy~existed = #1 }
+    , copy existed                .meta:n             = { copy~existed = { #1 } }
     , copy existed                .value_required:n   = true
     , quiet                       .bool_set:N         = \l__crthm_creating_quiet_bool
     , quiet                       .initial:n          = { false }
@@ -567,27 +567,27 @@
   {
     , parent~counter              .code:n             = { \crthm_counter_within:en { \l__crthm_current_env_tl } { #1 } }
     , parent~counter              .value_required:n   = true
-    , parent-counter              .meta:n             = { parent~counter = #1 }
+    , parent-counter              .meta:n             = { parent~counter = { #1 } }
     , parent-counter              .value_required:n   = true
-    , parent counter              .meta:n             = { parent~counter = #1 }
+    , parent counter              .meta:n             = { parent~counter = { #1 } }
     , parent counter              .value_required:n   = true
-    , number~within               .meta:n             = { parent~counter = #1 }
+    , number~within               .meta:n             = { parent~counter = { #1 } }
     , number~within               .value_required:n   = true
-    , number-within               .meta:n             = { parent~counter = #1 }
+    , number-within               .meta:n             = { parent~counter = { #1 } }
     , number-within               .value_required:n   = true
-    , number within               .meta:n             = { parent~counter = #1 }
+    , number within               .meta:n             = { parent~counter = { #1 } }
     , number within               .value_required:n   = true
     , shared~counter              .code:n             = { \crthm_counter_alias:en { \l__crthm_current_env_tl } { #1 } }
     , shared~counter              .value_required:n   = true
-    , shared-counter              .meta:n             = { shared~counter = #1 }
+    , shared-counter              .meta:n             = { shared~counter = { #1 } }
     , shared-counter              .value_required:n   = true
-    , shared counter              .meta:n             = { shared~counter = #1 }
+    , shared counter              .meta:n             = { shared~counter = { #1 } }
     , shared counter              .value_required:n   = true
-    , number~like                 .meta:n             = { shared~counter = #1 }
+    , number~like                 .meta:n             = { shared~counter = { #1 } }
     , number~like                 .value_required:n   = true
-    , number-like                 .meta:n             = { shared~counter = #1 }
+    , number-like                 .meta:n             = { shared~counter = { #1 } }
     , number-like                 .value_required:n   = true
-    , number like                 .meta:n             = { shared~counter = #1 }
+    , number like                 .meta:n             = { shared~counter = { #1 } }
     , number like                 .value_required:n   = true
     , unknown                     .code:n             = {}
   }
@@ -704,33 +704,33 @@
     , name                        .value_required:n   = true
     , name~style                  .code:n             = { \exp_args:Ne \NameTheorem { \l__crthm_current_env_tl } { #1 } }
     , name~style                  .value_required:n   = true
-    , name-style                  .meta:n             = { name~style = #1 }
+    , name-style                  .meta:n             = { name~style = { #1 } }
     , name-style                  .value_required:n   = true
-    , name style                  .meta:n             = { name~style = #1 }
+    , name style                  .meta:n             = { name~style = { #1 } }
     , name style                  .value_required:n   = true
     , parent~counter              .code:n             = { \crthm_counter_within:en { \l__crthm_current_env_tl } { #1 } }
     , parent~counter              .value_required:n   = true
-    , parent-counter              .meta:n             = { parent~counter = #1 }
+    , parent-counter              .meta:n             = { parent~counter = { #1 } }
     , parent-counter              .value_required:n   = true
-    , parent counter              .meta:n             = { parent~counter = #1 }
+    , parent counter              .meta:n             = { parent~counter = { #1 } }
     , parent counter              .value_required:n   = true
-    , number~within               .meta:n             = { parent~counter = #1 }
+    , number~within               .meta:n             = { parent~counter = { #1 } }
     , number~within               .value_required:n   = true
-    , number-within               .meta:n             = { parent~counter = #1 }
+    , number-within               .meta:n             = { parent~counter = { #1 } }
     , number-within               .value_required:n   = true
-    , number within               .meta:n             = { parent~counter = #1 }
+    , number within               .meta:n             = { parent~counter = { #1 } }
     , number within               .value_required:n   = true
     , shared~counter              .code:n             = { \crthm_counter_alias:en { \l__crthm_current_env_tl } { #1 } }
     , shared~counter              .value_required:n   = true
-    , shared-counter              .meta:n             = { shared~counter = #1 }
+    , shared-counter              .meta:n             = { shared~counter = { #1 } }
     , shared-counter              .value_required:n   = true
-    , shared counter              .meta:n             = { shared~counter = #1 }
+    , shared counter              .meta:n             = { shared~counter = { #1 } }
     , shared counter              .value_required:n   = true
-    , number~like                 .meta:n             = { shared~counter = #1 }
+    , number~like                 .meta:n             = { shared~counter = { #1 } }
     , number~like                 .value_required:n   = true
-    , number-like                 .meta:n             = { shared~counter = #1 }
+    , number-like                 .meta:n             = { shared~counter = { #1 } }
     , number-like                 .value_required:n   = true
-    , number like                 .meta:n             = { shared~counter = #1 }
+    , number like                 .meta:n             = { shared~counter = { #1 } }
     , number like                 .value_required:n   = true
     , unknown                     .code:n             = {}
   }
