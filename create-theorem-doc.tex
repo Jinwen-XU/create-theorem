@@ -85,7 +85,7 @@
 
 \begin{document}
 
-\def\PackageVersion{2022/03/11}
+\def\PackageVersion{2022/03/18}
 
 \title{\createtheorempackage{}\\\smallskip\itshape Initializing theorem-like environments with multilingual support}
 \author{Jinwen XU}
@@ -311,7 +311,7 @@ The previous two commands are especially useful for package or class writers, wh
 Supported keys are:
 \vspace{-.2\baselineskip}
 \begin{itemize}
-    \item \commandoption{name style}\lstinline| = |\meta{configuration}
+    \item \commandoption{name}\lstinline| = |\meta{configuration} and \commandoption{name style}\lstinline| = |\meta{configuration}
         \begin{itemize}
             \item Same as \lstinline|\NameTheorem{|\meta{name of environment}\lstinline|}{|\meta{configuration}\lstinline|}|.
             \item Note that this configuration can overwrite those already specified in \lstinline|\NameTheorem|.
@@ -435,12 +435,11 @@ In each case, the two environments \texttt{idea} and \texttt{idea*} share the sa
 \section{Known issues}
 
 \begin{itemize}
-    \item The current mechanism does not work well for German, a problem originated in the package \textsf{crefthe}. The author plans to adopt a more refined approach in later versions so as to support the various situations in German.
-    \item If the option ``\packageoption{name in link}'' is enabled, the ``\packageoption{name as is}'' mode shall take longer time to produce the final result, for the current implementation uses \lstinline|\regexpatchcmd| to patch some of the referencing formats, which is not very efficient.
+    \item The current mechanism does not work well for German, a problem originated in the package \textsf{crefthe}. The author plans to adopt a more refined approach in a later version so as to support the various grammatical situations in German.
     \item There may be inaccuracies in the translation of those preset names.
 \end{itemize}
 
-% \medskip
+\medskip
 If you run into any issues or have ideas for improvement, feel free to discuss on:
 \begin{center}
     \url{https://github.com/Jinwen-XU/create-theorem/issues}

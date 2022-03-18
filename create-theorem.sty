@@ -13,7 +13,7 @@
 \RequirePackage{l3keys2e}
 \ProvidesExplPackage
   {create-theorem}
-  {2022/03/11} {}
+  {2022/03/18} {}
   {Initializing theorem-like environments with multilingual support}
 
 \keys_define:nn { create-theorem }
@@ -605,6 +605,10 @@
   { env-not-created }
   { The~theorem-like~environment~"#1"~cannot~be~created,~an~environment~with~the~same~name~has~already~existed. }
 
+\msg_new:nnn { create-theorem }
+  { env-not-named }
+  { The~theorem-like~environment~"#1"~cannot~be~created,~you~have~to~name~it~before~initialization. }
+
 \cs_new:Nn \crthm_create_theorem:nn
   {
     \cs_if_exist:cTF { #1 }
@@ -636,44 +640,56 @@
           }
       }
       {
-        \group_begin:
-        \bool_if:NT \l__crthm_creating_apply_style_bool
+        \cs_if_exist:cTF { c@ #1 }
           {
-            \exp_after:wN \theoremstyle \exp_after:wN { \l__crthm_creating_apply_style_tl }
-          }
-        \bool_if:NTF \l__crthm_creating_numberless_bool
-          {
-            \newtheorem*{ #1 _crthm_regional } { \tl_use:c { g_crthm_name_heading_ #1 _ \languagename _tl } }
-          }
-          {
-            \newtheorem { #1 _crthm_regional } [#1] { \tl_use:c { g_crthm_name_heading_ #1 _ \languagename _tl } }
-          }
-        \group_end:
-        \NewDocumentEnvironment { #1 } { O{} }
-          % In "regionalref" mode, the counter received by the referencing system is "#1 _crthm_regional"
-          % while in "originalref" mode, the counter received is "#1 _crthm_original_\languagename"
-          {
-            \tl_if_blank:eTF { ##1 }
+            \group_begin:
+            \bool_if:NTF \l__crthm_creating_apply_style_bool
               {
-                \begin{ #1 _crthm_regional }
+                \exp_args:No \theoremstyle { \l__crthm_creating_apply_style_tl }
               }
               {
-                \begin{ #1 _crthm_regional }[##1]
+                \tl_if_exist:cT { c_crthm_theorem_style_preset_ #1 _tl }
+                  {
+                    \exp_args:Nv \theoremstyle { c_crthm_theorem_style_preset_ #1 _tl }
+                  }
               }
-              \bool_if:NF \l__crthm_regionalref_bool
-                {
-                  \addtocounter   { #1 _crthm_original_\languagename } { -1 }
-                  \refstepcounter { #1 _crthm_original_\languagename }
-                }
+            \bool_if:NTF \l__crthm_creating_numberless_bool
+              {
+                \newtheorem*{ #1 _crthm_regional } { \tl_use:c { g_crthm_name_heading_ #1 _ \languagename _tl } }
+              }
+              {
+                \newtheorem { #1 _crthm_regional } [#1] { \tl_use:c { g_crthm_name_heading_ #1 _ \languagename _tl } }
+              }
+            \group_end:
+            \NewDocumentEnvironment { #1 } { O{} }
+              % In "regionalref" mode, the counter received by the referencing system is "#1 _crthm_regional"
+              % while in "originalref" mode, the counter received is "#1 _crthm_original_\languagename"
+              {
+                \tl_if_blank:eTF { ##1 }
+                  {
+                    \begin{ #1 _crthm_regional }
+                  }
+                  {
+                    \begin{ #1 _crthm_regional }[##1]
+                  }
+                  \bool_if:NF \l__crthm_regionalref_bool
+                    {
+                      \addtocounter   { #1 _crthm_original_\languagename } { -1 }
+                      \refstepcounter { #1 _crthm_original_\languagename }
+                    }
+              }
+              {
+                \end{ #1 _crthm_regional }
+              }
+            \bool_if:NT \l__crthm_creating_create_starred_bool
+              {
+                \newtheorem*{ #1 * } { \tl_use:c { g_crthm_name_heading_ #1 _ \languagename _tl } }
+              }
+            \keys_set:nn { create-theorem-creating / counter-management } { #2 }
           }
           {
-            \end{ #1 _crthm_regional }
+            \msg_error:nnn  { create-theorem } { env-not-named } { #1 }
           }
-        \bool_if:NT \l__crthm_creating_create_starred_bool
-          {
-            \newtheorem*{ #1 * } { \tl_use:c { g_crthm_name_heading_ #1 _ \languagename _tl } }
-          }
-        \keys_set:nn { create-theorem-creating / counter-management } { #2 }
       }
   }
 
