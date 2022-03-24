@@ -1,64 +1,76 @@
 %! TEX program = xelatex
 \documentclass[classical]{einfart}
 
-% \linenumbers
-
 \usepackage{ProjLib}
 
 %%================================
 %% For typesetting code
 %%================================
 \usepackage{listings}
-\definecolor{maintheme}{RGB}{70,130,180}
-\definecolor{forestgreen}{RGB}{21,122,81}
-\definecolor{lightergray}{gray}{0.99}
-\lstset{language=[LaTeX]TeX,
-    keywordstyle=\color{maintheme},
-    basicstyle=\ttfamily,
-    commentstyle=\color{forestgreen}\ttfamily,
-    stringstyle=\rmfamily,
-    showstringspaces=false,
-    breaklines=true,
-    frame=lines,
-    backgroundcolor=\color{lightergray},
-    flexiblecolumns=true,
-    escapeinside={(*}{*)},
-    % numbers=left,
-    numberstyle=\scriptsize, stepnumber=1, numbersep=5pt,
-    % firstnumber=last,
+\usepackage{xcolor}
+\usepackage{setspace}
+\definecolor{code-main}{RGB}{70,130,180}
+\definecolor{code-expl3}{RGB}{240,50,60}
+\definecolor{code-option}{RGB}{40,110,20}
+\definecolor{code-keys}{RGB}{100,130,150}
+\definecolor{code-comment}{RGB}{20,120,80}
+\definecolor{code-background}{gray}{0.99}
+\lstset{
+    language = [LaTeX]TeX,
+    basicstyle = \ttfamily,
+    keywordstyle = \color{code-main},
+    commentstyle = \color{code-comment},
+    showstringspaces = false,
+    breaklines = true,
+    frame = lines,
+    backgroundcolor = \color{code-background},
+    flexiblecolumns = true,
+    escapeinside = {(*}{*)},
+    alsoletter = {_,:},
+    % numbers = left,
+    % firstnumber = last,
+    numberstyle = \scriptsize\ttfamily,
+    stepnumber = 1,
+    numbersep = 5pt,
 }
-\providecommand{\meta}[1]{$\langle${\normalfont\itshape#1}$\rangle$}
-\lstset{moretexcs=%
-    {
+\newcommand{\meta}[1]{$\langle${\normalfont\itshape#1}$\rangle$}
+\lstset{% LaTeX2 commands
+    classoffset = 0,
+    texcsstyle =* \color{code-main},
+    moretexcs =
+      {
         cref,crefname,
         Cref,Crefname,
         crefformat,
-        crefthe,crefthename,crefthemark,
+        crefthe,crefthename,
         Crefthe,Crefthename,
+        crefthemark,
         selectlanguage,
         theoremstyle,
         NameTheorem,
         CreateTheorem,
         SetTheorem,
-        regexpatchcmd,
-    }
+      }
 }
-\lstnewenvironment{code}%
-{\setstretch{1.07}\LocallyStopLineNumbers%
-\setkeys{lst}{columns=fullflexible,keepspaces=true}%
+\lstset{% LaTeX3 commands
+    classoffset = 1,
+    texcsstyle =* \color{code-expl3},
+    moretexcs =
+      {
+      }
 }
-{\ResumeLineNumbers\vspace{-.25\baselineskip}}
-\lstnewenvironment{code*}%
-{\setstretch{1.07}\LocallyStopLineNumbers%
-\setkeys{lst}{numbers=left,columns=fullflexible,keepspaces=true}%
-}
-{\ResumeLineNumbers}
+\lstnewenvironment{code}{\setstretch{1.05}\LocallyStopLineNumbers}{\ResumeLineNumbers\vspace{-.3\baselineskip}\vspace{-.5\parskip}}
+\lstnewenvironment{code*}{\setstretch{1.05}\lstset{numbers=left}\LocallyStopLineNumbers}{\ResumeLineNumbers\vspace{-.3\baselineskip}\vspace{-.5\parskip}}
+
+\newcommand{\packageoption}[1]{\texttt{\textcolor{code-option}{#1}}}
+\newcommand{\commandoption}[1]{\texttt{\textcolor{code-keys}{#1}}}
 
 %%================================
 %% tip
 %%================================
 \usepackage[many]{tcolorbox}
-\newenvironment{tip}[1][Tip]{%
+\newenvironment{tip}[1][Tip]
+  {%
     \LocallyStopLineNumbers%
     \begin{tcolorbox}[breakable,
         enhanced,
@@ -74,11 +86,11 @@
         top = 2.5mm,
         bottom = 1.5mm,
         title={\scshape\sffamily #1}]%
-}{\end{tcolorbox}\ResumeLineNumbers}
-
-
-\newcommand{\packageoption}[1]{\texttt{\textcolor{black!67!green}{#1}}}
-\newcommand{\commandoption}[1]{\texttt{\textcolor{black!67!cyan}{#1}}}
+  }
+  {%
+    \end{tcolorbox}%
+    \ResumeLineNumbers%
+  }
 
 
 \newcommand{\createtheorempackage}{\textsf{create-theorem}}
@@ -119,7 +131,7 @@ First, you need a backend to provide the command \lstinline|\newtheorem| with th
 
 \medskip
 It has the following options:
-\begin{itemize}
+\begin{itemize}[label=,leftmargin=1.25em,itemindent=-1.25em]
     % \item \packageoption{draft} or \packageoption{fast}
     %     \begin{itemize}
     %         \item Fast mode. The functionality will be appropriately reduced to get faster compilation speed, recommended to use during the writing stage.
@@ -148,7 +160,7 @@ It has the following options:
 
 \section{How to use it}
 
-\subsection[Naming theorem-like environments]{Naming theorem-like environments with \texttt{\textbackslash\textcolor{maintheme}{NameTheorem}}}
+\subsection[Naming theorem-like environments]{Naming theorem-like environments with \texttt{\textbackslash\textcolor{code-main}{NameTheorem}}}
 
 The syntax of \lstinline|\NameTheorem| is as follows:
 \begin{code}
@@ -157,7 +169,7 @@ The syntax of \lstinline|\NameTheorem| is as follows:
 
 Supported keys are:
 \vspace{-.2\baselineskip}
-\begin{itemize}
+\begin{itemize}[label=,leftmargin=1.25em,itemindent=-1.25em]
     \item \commandoption{heading}\lstinline| = |\meta{configuration}
         \begin{itemize}
             \item The heading of the environment, where \meta{configuration} can be:
@@ -215,18 +227,13 @@ Supported keys are:
         \end{itemize}
 \end{itemize}
 
-\medskip
-\begin{center}
-    \itshape
-    If you're feeling confused, don't worry, there is an Examples section later illustrating its usage.
-\end{center}
-
+\vspace{-.3\baselineskip}
 \begin{tip}
     You can also define the names within \lstinline|\CreateTheorem| while initializing the theorem-like environments. \lstinline|\NameTheorem| is especially useful for package or class authors who wish to preset suitable names (with styles) in their packages or classes.
 \end{tip}
 
 
-\subsection[Initializing theorem-like environments]{Initializing theorem-like environments with \texttt{\textbackslash\textcolor{maintheme}{CreateTheorem}}}
+\subsection[Initializing theorem-like environments]{Initializing theorem-like environments with \texttt{\textbackslash\textcolor{code-main}{CreateTheorem}}}
 
 The syntax of \lstinline|\CreateTheorem| is as follows:
 \begin{code}
@@ -235,7 +242,7 @@ The syntax of \lstinline|\CreateTheorem| is as follows:
 
 Supported keys are:
 \vspace{-.2\baselineskip}
-\begin{itemize}
+\begin{itemize}[label=,leftmargin=1.25em,itemindent=-1.25em]
     \item \commandoption{name}\lstinline| = |\meta{configuration}
         \begin{itemize}
             \item Setting the names. Same as \lstinline|\NameTheorem{|\meta{name of environment}\lstinline|}{|\meta{configuration}\lstinline|}|.
@@ -281,11 +288,6 @@ Supported keys are:
         \end{itemize}
 \end{itemize}
 
-\begin{center}
-    \itshape
-    If you're feeling confused, don't worry, there is an Examples section later illustrating its usage.
-\end{center}
-
 \begin{tip}
     The names for the following environments have been preset: \texttt{assertion}, \texttt{assumption}, \texttt{axiom}, \texttt{conclusion}, \texttt{conjecture}, \texttt{convention}, \texttt{corollary}, \texttt{definition}, \texttt{definition-proposition}, \texttt{definition-theorem}, \texttt{example}, \texttt{exercise}, \texttt{fact}, \texttt{hypothesis}, \texttt{lemma}, \texttt{notation}, \texttt{observation}, \texttt{postulate}, \texttt{problem}, \texttt{property}, \texttt{proposition}, \texttt{question}, \texttt{remark} and \texttt{theorem}. If you are fine with the preset names, then you don't need to specify the key ``\commandoption{name}'' while creating them, otherwise you shall have to use the package option ``\packageoption{no preset names}'' to disable the presets and then define your own ones.
 \end{tip}
@@ -296,7 +298,7 @@ Please note that, by default, an normal environment \meta{env} and its starred r
 
 
 \bigskip
-\subsection[Configuring theorem-like environments]{Configuring theorem-like environments with \texttt{\textbackslash\textcolor{maintheme}{SetTheorem}}}
+\subsection[Configuring theorem-like environments]{Configuring theorem-like environments with \texttt{\textbackslash\textcolor{code-main}{SetTheorem}}}
 
 The previous two commands are especially useful for package or class writers, while this one is more for the users. If you are not satisfied with preset name styles or numbering settings, then even after initializing the environments, you can still further configure them by means of \lstinline|\SetTheorem|, the syntax of which is as follows:
 
@@ -310,7 +312,7 @@ The previous two commands are especially useful for package or class writers, wh
 
 Supported keys are:
 \vspace{-.2\baselineskip}
-\begin{itemize}
+\begin{itemize}[label=,leftmargin=1.25em,itemindent=-1.25em]
     \item \commandoption{name}\lstinline| = |\meta{configuration} and \commandoption{name style}\lstinline| = |\meta{configuration}
         \begin{itemize}
             \item Same as \lstinline|\NameTheorem{|\meta{name of environment}\lstinline|}{|\meta{configuration}\lstinline|}|.
@@ -330,6 +332,12 @@ Supported keys are:
             \item Synonymous names: \commandoption{shared-counter} \,$|$\, \commandoption{sharedcounter} \,$|$\, \\\phantom{Synonymous names: }\commandoption{number like} \,$|$\, \commandoption{number-like} \,$|$\, \commandoption{numberlike}
         \end{itemize}
 \end{itemize}
+
+\bigskip
+\begin{center}
+    \itshape
+    If you're feeling confused, don't worry. Let's now take a look at some examples.
+\end{center}
 
 
 \section{Examples}
