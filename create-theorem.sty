@@ -551,6 +551,8 @@
             \seq_gput_right:cn { g_crthm_name_cref_plural_ #1 _ ##1 _seq } { \tl_use:c { g_crthm_name_cref_plural_ ####1 _ ##1 _tl } }
             \seq_gput_right:cn { g_crthm_name_Cref_singular_ #1 _ ##1 _seq } { \tl_use:c { g_crthm_name_Cref_singular_ ####1 _ ##1 _tl } }
             \seq_gput_right:cn { g_crthm_name_Cref_plural_ #1 _ ##1 _seq } { \tl_use:c { g_crthm_name_Cref_plural_ ####1 _ ##1 _tl } }
+            % set the numbering style to be the same as the last environment
+            \tl_gset:cn { g_crthm_number_style_ #1 _tl } { \tl_use:c { g_crthm_number_style_ ####1 _tl } }
           }
         % set heading name for the combined environment
         \tl_gset:cn { g_crthm_name_heading_ #1 _ ##1 _tl } { \seq_use:cn { g_crthm_name_heading_ #1 _ ##1 _seq } { \g_crthm_combined_name_sep_tl } }
