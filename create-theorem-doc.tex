@@ -97,7 +97,7 @@
 
 \begin{document}
 
-\def\PackageVersion{2022/04/02}
+\def\PackageVersion{2022/04/06}
 
 \title{\createtheorempackage{}\\\smallskip\itshape Initializing theorem-like environments with multilingual support}
 \author{Jinwen XU}
@@ -122,7 +122,7 @@
 First, you need a backend to provide the command \lstinline|\newtheorem| with the usual behaviour, for example, \textsf{amsthm}. After that, you can simply load the current package with:
 
 \begin{code}
-\usepackage{create-theorem}
+\usepackage[(*\meta{options}*)]{create-theorem}
 \end{code}
 
 \begin{tip}
@@ -207,7 +207,7 @@ Supported keys are:
         \end{itemize}
     \item \commandoption{crefname style}\lstinline| = |\meta{style}
         \begin{itemize}
-            \item The style of the ``crefname'', you can specify the font, text style, color, etc.
+            \item The style of the \textquote{crefname}, you can specify the font, text style, color, etc.
             \item Synonymous names: \commandoption{crefname-style} \,$|$\, \commandoption{crefnamestyle}
         \end{itemize}
     \item \commandoption{Crefname}
@@ -217,13 +217,18 @@ Supported keys are:
         \end{itemize}
     \item \commandoption{Crefname style}\lstinline| = |\meta{style}
         \begin{itemize}
-            \item The style of the ``Crefname'', you can specify the font, text style, color, etc.
+            \item The style of the \textquote{Crefname}, you can specify the font, text style, color, etc.
             \item Synonymous names: \commandoption{Crefname-style} \,$|$\, \commandoption{Crefnamestyle}
         \end{itemize}
     \item \commandoption{numbering style}\lstinline| = |\meta{style}
         \begin{itemize}
             \item The style of numbering in the reference, you can specify the font, text style, color, etc.
             \item Synonymous names: \commandoption{numbering-style} \,$|$\, \commandoption{numberingstyle}
+        \end{itemize}
+    \item \commandoption{use name}\lstinline| = |\meta{list of existed environment(s) separated with semicolon \textquote{ ; }}
+        \begin{itemize}
+            \item Use the name(s) and style(s) of given environment(s). If there are multiple ones specified, the result would be a string combining the names, separated with \textquote{\texttt{-}}.
+            \item Synonymous names: \commandoption{combined} \,$|$\, \commandoption{use-name} \,$|$\, \commandoption{usename}
         \end{itemize}
 \end{itemize}
 
@@ -243,14 +248,15 @@ The syntax of \lstinline|\CreateTheorem| is as follows:
 Supported keys are:
 \vspace{-.2\baselineskip}
 \begin{itemize}[label=,leftmargin=1.25em,itemindent=-1.25em]
-    \item \commandoption{name}\lstinline| = |\meta{configuration}
+    \item \commandoption{name}\lstinline| = |\meta{configuration} \quad or \quad \commandoption{name style}\lstinline| = |\meta{configuration}
         \begin{itemize}
             \item Setting the names. Same as \lstinline|\NameTheorem{|\meta{name of environment}\lstinline|}{|\meta{configuration}\lstinline|}|.
-        \end{itemize}
-    \item \commandoption{name style}\lstinline| = |\meta{configuration}
-        \begin{itemize}
-            \item Setting the style of names. Same as using \lstinline|\NameTheorem|.
             \item Synonymous names: \commandoption{name-style} \,$|$\, \commandoption{namestyle}
+        \end{itemize}
+    \item \commandoption{use name}\lstinline| = |\meta{list of existed environment(s) separated with semicolon \textquote{ ; }}
+        \begin{itemize}
+            \item Using existed name(s). Same as in \lstinline|\NameTheorem|.
+            \item Synonymous names: \commandoption{combined} \,$|$\, \commandoption{use-name} \,$|$\, \commandoption{usename}
         \end{itemize}
     \item \commandoption{style}\lstinline| = |\meta{theorem style}
         \begin{itemize}
@@ -289,7 +295,7 @@ Supported keys are:
 \end{itemize}
 
 \begin{tip}
-    The names for the following environments have been preset: \texttt{assertion}, \texttt{assumption}, \texttt{axiom}, \texttt{conclusion}, \texttt{conjecture}, \texttt{convention}, \texttt{corollary}, \texttt{definition}, \texttt{definition-proposition}, \texttt{definition-theorem}, \texttt{example}, \texttt{exercise}, \texttt{fact}, \texttt{hypothesis}, \texttt{lemma}, \texttt{notation}, \texttt{observation}, \texttt{postulate}, \texttt{problem}, \texttt{property}, \texttt{proposition}, \texttt{question}, \texttt{remark} and \texttt{theorem}. If you are fine with the preset names, then you don't need to specify the key ``\commandoption{name}'' while creating them, otherwise you shall have to use the package option ``\packageoption{no preset names}'' to disable the presets and then define your own ones.
+    The names for the following environments have been preset: \texttt{assertion}, \texttt{assumption}, \texttt{axiom}, \texttt{conclusion}, \texttt{conjecture}, \texttt{convention}, \texttt{corollary}, \texttt{definition}, \texttt{example}, \texttt{exercise}, \texttt{fact}, \texttt{hypothesis}, \texttt{lemma}, \texttt{notation}, \texttt{observation}, \texttt{postulate}, \texttt{problem}, \texttt{property}, \texttt{proposition}, \texttt{question}, \texttt{remark} and \texttt{theorem}. If you are fine with the preset names, then there is no need to specify the key \textquote{\commandoption{name}} while creating them, otherwise you shall have to use the package option \textquote{\packageoption{no preset names}} to disable the presets and then define your own ones.
 \end{tip}
 
 \medskip
@@ -385,7 +391,7 @@ This is not exciting at all. Now, let's say we are writing a bilingual note in E
 }
 \end{code}
 
-With this, if you use \lstinline|\selectlanguage{french}|, the \texttt{idea} environment shall be automatically displayed as ``Idée''. And if you \lstinline|\crefthe| it, the definite article and the name showed up properly just as expected.
+With this, if you use \lstinline|\selectlanguage{french}|, the \texttt{idea} environment shall be automatically displayed as \textquote{Idée}. And if you \lstinline|\crefthe| it, the definite article and the name showed up properly just as expected.
 
 \medskip
 Next we shall deal with the numbering problem. Let's continue to use this environment \texttt{idea} for demonstration -- suppose that we have set the names up with \lstinline|\NameTheorem|.

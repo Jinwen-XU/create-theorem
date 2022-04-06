@@ -13,7 +13,7 @@
 \RequirePackage{l3keys2e}
 \ProvidesExplPackage
   {create-theorem}
-  {2022/04/02} {}
+  {2022/04/06} {}
   {Initializing theorem-like environments with multilingual support}
 
 \keys_define:nn { create-theorem }
@@ -112,6 +112,14 @@
     , numbering-style       .value_required:n   = true
     , numbering style       .meta:n             = { numbering~style = { #1 } }
     , numbering style       .value_required:n   = true
+    , use~name              .code:n             = { \crthm_set_name_with_existed_names:en { \l__crthm_current_env_tl } { #1 } }
+    , use~name              .value_required:n   = true
+    , use-name              .meta:n             = { use~name = { #1 } }
+    , use-name              .value_required:n   = true
+    , use name              .meta:n             = { use~name = { #1 } }
+    , use name              .value_required:n   = true
+    , combined              .meta:n             = { use~name = { #1 } }
+    , combined              .value_required:n   = true
     , unknown               .code:n             = {}
   }
 
@@ -199,10 +207,15 @@
   {
     \tl_if_blank:eTF { #3 }
       {
-        \tl_gset:cn { g_crthm_name_ #7 ref_article_singular_ #1 _ #2 _tl } { \crefthemark{ \skip_horizontal:n { -.5ex } } }
-        \tl_gset:cn { g_crthm_name_ #7 ref_article_plural_ #1 _ #2 _tl } { \crefthemark{ \skip_horizontal:n { -.5ex } } }
+        %% The spacing here is rather strange, but I haven't came up with a better method yet
+        \tl_gset:cn { g_crthm_core_name_ #7 ref_article_singular_ #1 _ #2 _tl } { \skip_horizontal:n { -.75ex } }
+        \tl_gset:cn { g_crthm_core_name_ #7 ref_article_plural_ #1 _ #2 _tl } { \skip_horizontal:n { -.75ex } }
+        \tl_gset:cn { g_crthm_name_ #7 ref_article_singular_ #1 _ #2 _tl } { \crefthemark { \skip_horizontal:n { -.5ex } } }
+        \tl_gset:cn { g_crthm_name_ #7 ref_article_plural_ #1 _ #2 _tl } { \crefthemark { \skip_horizontal:n { -.5ex } } }
       }
       {
+        \tl_gset:cn { g_crthm_core_name_ #7 ref_article_singular_ #1 _ #2 _tl } { #3 }
+        \tl_gset:cn { g_crthm_core_name_ #7 ref_article_plural_ #1 _ #2 _tl } { #5 }
         \tl_gset:cn { g_crthm_name_ #7 ref_article_singular_ #1 _ #2 _tl } { \crefthemark { #3 } }
         \tl_gset:cn { g_crthm_name_ #7 ref_article_plural_ #1 _ #2 _tl } { \crefthemark { #5 } }
       }
@@ -503,6 +516,65 @@
   }
 
 
+\tl_new:N   \g_crthm_combined_name_sep_tl
+\tl_gset:Nn \g_crthm_combined_name_sep_tl { - }
+
+\cs_new:Nn \crthm_set_name_with_existed_names:nn
+  % #1 = env name
+  % #2 = list of existed environments
+  {
+    \clist_map_inline:Nn \g_crthm_supported_language_clist
+      { % ##1 = language name
+        \seq_gclear_new:c { g_crthm_name_heading_ #1 _ ##1 _seq }
+        \seq_gclear_new:c { g_crthm_name_cref_article_singular_ #1 _ ##1 _seq }
+        \seq_gclear_new:c { g_crthm_name_cref_article_plural_ #1 _ ##1 _seq }
+        \seq_gclear_new:c { g_crthm_name_cref_singular_ #1 _ ##1 _seq }
+        \seq_gclear_new:c { g_crthm_name_cref_plural_ #1 _ ##1 _seq }
+        \seq_gclear_new:c { g_crthm_name_Cref_article_singular_ #1 _ ##1 _seq }
+        \seq_gclear_new:c { g_crthm_name_Cref_article_plural_ #1 _ ##1 _seq }
+        \seq_gclear_new:c { g_crthm_name_Cref_singular_ #1 _ ##1 _seq }
+        \seq_gclear_new:c { g_crthm_name_Cref_plural_ #1 _ ##1 _seq }
+        \bool_set_true:N \l_tmpa_bool
+        \regex_split:nnN { \s* ; \s* } { #2 } { \l_tmpa_seq }
+        \seq_map_inline:Nn \l_tmpa_seq
+          { % ####1 = existed environments
+            \bool_if:NT \l_tmpa_bool
+              { % use the first environment's definite article as that of the combined environment
+                \tl_gset:cn { g_crthm_saved_name_cref_article_singular_ #1 _ ##1 _tl } { \tl_use:c { g_crthm_core_name_cref_article_singular_ ####1 _ ##1 _tl } }
+                \tl_gset:cn { g_crthm_saved_name_cref_article_plural_ #1 _ ##1 _tl } { \tl_use:c { g_crthm_core_name_cref_article_plural_ ####1 _ ##1 _tl } }
+                \tl_gset:cn { g_crthm_saved_name_Cref_article_singular_ #1 _ ##1 _tl } { \tl_use:c { g_crthm_core_name_Cref_article_singular_ ####1 _ ##1 _tl } }
+                \tl_gset:cn { g_crthm_saved_name_Cref_article_plural_ #1 _ ##1 _tl } { \tl_use:c { g_crthm_core_name_Cref_article_plural_ ####1 _ ##1 _tl } }
+                \bool_set_false:N \l_tmpa_bool
+              }
+            \seq_gput_right:cn { g_crthm_name_heading_ #1 _ ##1 _seq } { \tl_use:c { g_crthm_name_heading_ ####1 _ ##1 _tl } }
+            \seq_gput_right:cn { g_crthm_name_cref_singular_ #1 _ ##1 _seq } { \tl_use:c { g_crthm_name_cref_singular_ ####1 _ ##1 _tl } }
+            \seq_gput_right:cn { g_crthm_name_cref_plural_ #1 _ ##1 _seq } { \tl_use:c { g_crthm_name_cref_plural_ ####1 _ ##1 _tl } }
+            \seq_gput_right:cn { g_crthm_name_Cref_singular_ #1 _ ##1 _seq } { \tl_use:c { g_crthm_name_Cref_singular_ ####1 _ ##1 _tl } }
+            \seq_gput_right:cn { g_crthm_name_Cref_plural_ #1 _ ##1 _seq } { \tl_use:c { g_crthm_name_Cref_plural_ ####1 _ ##1 _tl } }
+          }
+        % set heading name for the combined environment
+        \tl_gset:cn { g_crthm_name_heading_ #1 _ ##1 _tl } { \seq_use:cn { g_crthm_name_heading_ #1 _ ##1 _seq } { \g_crthm_combined_name_sep_tl } }
+        % set crefname for the combined environment
+        \__crthm_set_name_crefname:nnn { #1 } { ##1 }
+          {
+            [ \tl_use:c { g_crthm_saved_name_cref_article_singular_ #1 _ ##1 _tl } ]
+            { \seq_use:cn { g_crthm_name_cref_singular_ #1 _ ##1 _seq } { \g_crthm_combined_name_sep_tl } }
+            [ \tl_use:c { g_crthm_saved_name_cref_article_plural_ #1 _ ##1 _tl } ]
+            { \seq_use:cn { g_crthm_name_cref_plural_ #1 _ ##1 _seq } { \g_crthm_combined_name_sep_tl } }
+          }
+        % set Crefname for the combined environment
+        \__crthm_set_name_Crefname:nnn { #1 } { ##1 }
+          {
+            [ \tl_use:c { g_crthm_saved_name_Cref_article_singular_ #1 _ ##1 _tl } ]
+            { \seq_use:cn { g_crthm_name_Cref_singular_ #1 _ ##1 _seq } { \g_crthm_combined_name_sep_tl } }
+            [ \tl_use:c { g_crthm_saved_name_Cref_article_plural_ #1 _ ##1 _tl } ]
+            { \seq_use:cn { g_crthm_name_Cref_plural_ #1 _ ##1 _seq } { \g_crthm_combined_name_sep_tl } }
+          }
+      }
+  }
+\cs_generate_variant:Nn \crthm_set_name_with_existed_names:nn { en }
+
+
 \NewDocumentCommand \NameTheorem { m m }
   {
     \crthm_name_theorem:nn { #1 } { #2 }
@@ -535,6 +607,14 @@
     , name-style                  .value_required:n   = true
     , name style                  .meta:n             = { name~style = { #1 } }
     , name style                  .value_required:n   = true
+    , use~name                    .code:n             = { \exp_args:Ne \NameTheorem { \l__crthm_current_env_tl } { use~name = #1 } }
+    , use~name                    .value_required:n   = true
+    , use-name                    .meta:n             = { use~name = { #1 } }
+    , use-name                    .value_required:n   = true
+    , use name                    .meta:n             = { use~name = { #1 } }
+    , use name                    .value_required:n   = true
+    , combined                    .meta:n             = { use~name = { #1 } }
+    , combined                    .value_required:n   = true
     , style                       .code:n             = { \bool_set_true:N \l__crthm_creating_apply_style_bool
                                                           \tl_set:Nn \l__crthm_creating_apply_style_tl { #1 }  }
     , style                       .value_required:n   = true
@@ -1710,91 +1790,11 @@
                   }
   }
 
-\NameTheorem { definition-proposition }
-  {
-    , heading =   {
-                    , english     = Definition-Proposition
-                    , french      = Définition-Proposition
-                    , ngerman     = Definition-Proposition
-                    , italian     = Definizione-Proposizione
-                    , portuguese  = Definição-Proposição
-                    , brazilian   = Definição-Proposição
-                    , spanish     = Definición-Proposición
-                    , schinese    = 定义-命题
-                    , tchinese    = 定義-命題
-                    , japanese    = 定義-命題
-                    , russian     = Определение-Предложение
-                  }
-    , crefname =  {
-                    , english     = {definition-proposition}{definition-propositions}
-                    , french      = [la]{définition-proposition}[les]{définition-propositions}
-                    , ngerman     = {Definition-Proposition}{Definitionen-Propositionen}
-                    , italian     = [la]{definizione-proposizione}[le]{definizioni-proposte}
-                    , portuguese  = [a]{definição-proposição}[as]{definições-proposições}
-                    , brazilian   = [a]{definição-proposição}[as]{definições-proposições}
-                    , spanish     = [la]{definición-proposición}[las]{definiciones-proposiciones}
-                    , schinese    = {定义-命题}{定义-命题}
-                    , tchinese    = {定義-命題}{定義-命題}
-                    , japanese    = {定義-命題}{定義-命題}
-                    , russian     = {определение-предложение}{определения-предложения}
-                  }
-    , Crefname =  {
-                    , english     = {Definition-proposition}{Definition-propositions}
-                    , french      = [La]{définition-proposition}[Les]{définition-propositions}
-                    , ngerman     = {Definition-Proposition}{Definitionen-Propositionen}
-                    , italian     = [La]{definizione-proposizione}[Le]{definizioni-proposte}
-                    , portuguese  = [A]{definição-proposição}[As]{definições-proposições}
-                    , brazilian   = [A]{definição-proposição}[As]{definições-proposições}
-                    , spanish     = [La]{definición-proposición}[Las]{definiciones-proposiciones}
-                    , schinese    = {定义-命题}{定义-命题}
-                    , tchinese    = {定義-命題}{定義-命題}
-                    , japanese    = {定義-命題}{定義-命題}
-                    , russian     = {Определение-предложение}{Определения-предложения}
-                  }
-  }
+\NameTheorem { definition-proposition } { combined = { definition ; proposition } }
+\NameTheorem { definition-theorem } { combined = { definition ; theorem } }
 
-\NameTheorem { definition-theorem }
-  {
-    , heading =   {
-                    , english     = Definition-Theorem
-                    , french      = Définition-Théorème
-                    , ngerman     = Definition-Satz
-                    , italian     = Definizione-Teorema
-                    , portuguese  = Definição-Teorema
-                    , brazilian   = Definição-Teorema
-                    , spanish     = Definición-Teorema
-                    , schinese    = 定义-定理
-                    , tchinese    = 定義-定理
-                    , japanese    = 定義-定理
-                    , russian     = Определение-Теорема
-                  }
-    , crefname =  {
-                    , english     = {definition-theorem}{definition-theorems}
-                    , french      = [la]{définition-théorème}[les]{définition-théorèmes}
-                    , ngerman     = {Definition-Satz}{Definitionen-Sätze}
-                    , italian     = [la]{definizione-teorema}[le]{definizioni-teoremi}
-                    , portuguese  = [a]{definição-teorema}[as]{definições-teoremas}
-                    , brazilian   = [a]{definição-teorema}[as]{definições-teoremas}
-                    , spanish     = [la]{definición-teorema}[las]{definiciones-teoremas}
-                    , schinese    = {定义-定理}{定义-定理}
-                    , tchinese    = {定義-定理}{定義-定理}
-                    , japanese    = {定義-定理}{定義-定理}
-                    , russian     = {определение-теорема}{определения-теоремы}
-                  }
-    , Crefname =  {
-                    , english     = {Definition-theorem}{Definition-theorems}
-                    , french      = [La]{définition-théorème}[Les]{définition-théorèmes}
-                    , ngerman     = {Definition-Satz}{Definitionen-Sätze}
-                    , italian     = [La]{definizione-teorema}[Le]{definizioni-teoremi}
-                    , portuguese  = [A]{definição-teorema}[As]{definições-teoremas}
-                    , brazilian   = [A]{definição-teorema}[As]{definições-teoremas}
-                    , spanish     = [La]{definición-teorema}[Las]{definiciones-teoremas}
-                    , schinese    = {定义-定理}{定义-定理}
-                    , tchinese    = {定義-定理}{定義-定理}
-                    , japanese    = {定義-定理}{定義-定理}
-                    , russian     = {Определение-теорема}{Определения-теоремы}
-                  }
-  }
+\NameTheorem { proposition-definition } { combined = { proposition ; definition } }
+\NameTheorem { theorem-definition } { combined = { theorem ; definition } }
 
 \endinput
 %%
