@@ -13,7 +13,7 @@
 \RequirePackage{l3keys2e}
 \ProvidesExplPackage
   {create-theorem}
-  {2022/04/06} {}
+  {2022/04/07} {}
   {Initializing theorem-like environments with multilingual support}
 
 \keys_define:nn { create-theorem }
@@ -741,7 +741,7 @@
                   % In "regionalref" mode, the counter received by the referencing system is "#1 _crthm_regional"
                   % while in "originalref" mode, the counter received is "#1 _crthm_original_\languagename"
                   {
-                    \tl_if_blank:eTF { ##1 }
+                    \tl_if_blank:nTF { ##1 }
                       {
                         \begin{ #1 _crthm_regional }
                       }
