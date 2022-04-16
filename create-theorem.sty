@@ -13,7 +13,7 @@
 \RequirePackage{l3keys2e}
 \ProvidesExplPackage
   {create-theorem}
-  {2022/04/07} {}
+  {2022/04/16} {}
   {Initializing theorem-like environments with multilingual support}
 
 \keys_define:nn { create-theorem }
@@ -845,6 +845,49 @@
 %=============================
 %   ---  Preset Names  ---
 %=============================
+
+\NameTheorem { application }
+  {
+    , heading =   {
+                    , english     = Application
+                    , french      = Application
+                    , ngerman     = Anwendung
+                    , italian     = Applicazione
+                    , portuguese  = Aplicação
+                    , brazilian   = Aplicação
+                    , spanish     = Aplicación
+                    , schinese    = 应用
+                    , tchinese    = 應用
+                    , japanese    = 応用
+                    , russian     = Применение
+                  }
+    , crefname =  {
+                    , english     = {application}{applications}
+                    , french      = [l']{application}[les]{applications}
+                    , ngerman     = {Anwendung}{Anwendungen}
+                    , italian     = [l']{applicazione}[le]{applicazioni}
+                    , portuguese  = [a]{aplicação}[as]{aplicações}
+                    , brazilian   = [a]{aplicação}[as]{aplicações}
+                    , spanish     = [la]{aplicación}[las]{aplicaciones}
+                    , schinese    = {应用}{应用}
+                    , tchinese    = {應用}{應用}
+                    , japanese    = {応用}{応用}
+                    , russian     = {применение}{приложения}
+                  }
+    , Crefname =  {
+                    , english     = {Application}{Applications}
+                    , french      = [L']{application}[Les]{applications}
+                    , ngerman     = {Anwendung}{Anwendungen}
+                    , italian     = [L']{applicazione}[Le]{applicazioni}
+                    , portuguese  = [A]{aplicação}[As]{aplicações}
+                    , brazilian   = [A]{aplicação}[As]{aplicações}
+                    , spanish     = [La]{aplicación}[Las]{aplicaciones}
+                    , schinese    = {应用}{应用}
+                    , tchinese    = {應用}{應用}
+                    , japanese    = {応用}{応用}
+                    , russian     = {Применение}{Приложения}
+                  }
+  }
 
 \NameTheorem { assertion }
   {
