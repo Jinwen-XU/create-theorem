@@ -138,12 +138,12 @@ It has the following options:
     %     \end{itemize}
     \item \packageoption{name as context}
         \begin{itemize}
-            \item When referencing, the names correspond to the current language context. For example, the English names will be displayed when referencing a theorem-like environment in English context, no matter which language context the original environment is in.
+            \item When referencing, the resulted names correspond to the current context. For example, the English names will be displayed when referencing a theorem-like environment in English context, no matter which linguistic context the original environment is in.
             \item Synonymous names: \packageoption{name-as-context} \,$|$\, \packageoption{nameascontext} \,$|$\, \packageoption{regionalref}
         \end{itemize}
     \item \packageoption{name as is}
         \begin{itemize}
-            \item When referencing, the names correspond to the language contexts in which the environments are defined. For example, if the environment is defined in English context, then the English names will be displayed when referencing it, regardless of the current language context.
+            \item When referencing, the resulted names correspond to the contexts in which the corresponding environments appeared. For example, if the environment is written in an English context, then it shall always be the English names displayed when referencing it, regardless of the current linguistic context.
             \item Synonymous names: \packageoption{name-as-is} \,$|$\, \packageoption{nameasis} \,$|$\, \packageoption{originalref}
         \end{itemize}
     \item \packageoption{name in link}
@@ -160,7 +160,7 @@ It has the following options:
 
 \section{How to use it}
 
-\subsection[Naming theorem-like environments]{Naming theorem-like environments with \texttt{\textbackslash\textcolor{code-main}{NameTheorem}}}
+\subsection[Naming theorem-like environments]{Naming theorem-like environments with \texttt{\textcolor{code-main}{\textbackslash NameTheorem}}}
 
 The syntax of \lstinline|\NameTheorem| is as follows:
 \begin{code}
@@ -238,7 +238,7 @@ Supported keys are:
 \end{tip}
 
 
-\subsection[Initializing theorem-like environments]{Initializing theorem-like environments with \texttt{\textbackslash\textcolor{code-main}{CreateTheorem}}}
+\subsection[Initializing theorem-like environments]{Initializing theorem-like environments with \texttt{\textcolor{code-main}{\textbackslash CreateTheorem}}}
 
 The syntax of \lstinline|\CreateTheorem| is as follows:
 \begin{code}
@@ -295,7 +295,7 @@ Supported keys are:
 \end{itemize}
 
 \begin{tip}
-    The names for the following environments have been preset: \texttt{application}, \texttt{assertion}, \texttt{assumption}, \texttt{axiom}, \texttt{conclusion}, \texttt{conjecture}, \texttt{construction}, \texttt{convention}, \texttt{corollary}, \texttt{definition}, \texttt{example}, \texttt{exercise}, \texttt{fact}, \texttt{hypothesis}, \texttt{lemma}, \texttt{notation}, \texttt{observation}, \texttt{postulate}, \texttt{problem}, \texttt{property}, \texttt{proposition}, \texttt{question}, \texttt{recall}, \texttt{remark} and \texttt{theorem}. If you are fine with the preset names, then there is no need to specify the key \textquote{\commandoption{name}} while creating them, otherwise you shall have to use the package option \textquote{\packageoption{no preset names}} to disable the presets and then define your own ones.
+    The names for the following environments have been preset: \texttt{application}, \texttt{assertion}, \texttt{assumption}, \texttt{axiom}, \texttt{claim}, \texttt{conclusion}, \texttt{conjecture}, \texttt{construction}, \texttt{convention}, \texttt{corollary}, \texttt{definition}, \texttt{example}, \texttt{exercise}, \texttt{fact}, \texttt{hypothesis}, \texttt{lemma}, \texttt{notation}, \texttt{observation}, \texttt{postulate}, \texttt{problem}, \texttt{property}, \texttt{proposition}, \texttt{question}, \texttt{recall}, \texttt{remark} and \texttt{theorem}. If you are fine with the preset names, then there is no need to specify the key \textquote{\commandoption{name}} while creating them, otherwise you shall have to use the package option \textquote{\packageoption{no preset names}} to disable the presets and then define your own ones.
 \end{tip}
 
 \medskip
@@ -304,7 +304,7 @@ Please note that, by default, an normal environment \meta{env} and its starred r
 
 
 \bigskip
-\subsection[Configuring theorem-like environments]{Configuring theorem-like environments with \texttt{\textbackslash\textcolor{code-main}{SetTheorem}}}
+\subsection[Configuring theorem-like environments]{Configuring theorem-like environments with \texttt{\textcolor{code-main}{\textbackslash SetTheorem}}}
 
 The previous two commands are especially useful for package or class writers, while this one is more for the users. If you are not satisfied with preset name styles or numbering settings, then even after initializing the environments, you can still further configure them by means of \lstinline|\SetTheorem|, the syntax of which is as follows:
 
