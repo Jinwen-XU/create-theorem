@@ -97,7 +97,7 @@
 
 \begin{document}
 
-\def\PackageVersion{2022/04/16}
+\def\PackageVersion{2022/04/23}
 
 \title{\createtheorempackage{}\\\smallskip\itshape Initializing theorem-like environments with multilingual support}
 \author{Jinwen XU}
@@ -295,7 +295,7 @@ Supported keys are:
 \end{itemize}
 
 \begin{tip}
-    The names for the following environments have been preset: \texttt{application}, \texttt{assertion}, \texttt{assumption}, \texttt{axiom}, \texttt{conclusion}, \texttt{conjecture}, \texttt{convention}, \texttt{corollary}, \texttt{definition}, \texttt{example}, \texttt{exercise}, \texttt{fact}, \texttt{hypothesis}, \texttt{lemma}, \texttt{notation}, \texttt{observation}, \texttt{postulate}, \texttt{problem}, \texttt{property}, \texttt{proposition}, \texttt{question}, \texttt{remark} and \texttt{theorem}. If you are fine with the preset names, then there is no need to specify the key \textquote{\commandoption{name}} while creating them, otherwise you shall have to use the package option \textquote{\packageoption{no preset names}} to disable the presets and then define your own ones.
+    The names for the following environments have been preset: \texttt{application}, \texttt{assertion}, \texttt{assumption}, \texttt{axiom}, \texttt{conclusion}, \texttt{conjecture}, \texttt{construction}, \texttt{convention}, \texttt{corollary}, \texttt{definition}, \texttt{example}, \texttt{exercise}, \texttt{fact}, \texttt{hypothesis}, \texttt{lemma}, \texttt{notation}, \texttt{observation}, \texttt{postulate}, \texttt{problem}, \texttt{property}, \texttt{proposition}, \texttt{question}, \texttt{recall}, \texttt{remark} and \texttt{theorem}. If you are fine with the preset names, then there is no need to specify the key \textquote{\commandoption{name}} while creating them, otherwise you shall have to use the package option \textquote{\packageoption{no preset names}} to disable the presets and then define your own ones.
 \end{tip}
 
 \medskip
@@ -381,11 +381,11 @@ This is not exciting at all. Now, let's say we are writing a bilingual note in E
 \CreateTheorem{idea}{
     (*\commandoption{name}*) = {
         (*\commandoption{heading}*)  = { english = Idea,
-                     french  = Idée, },
+                       french = Idée, },
         (*\commandoption{crefname}*) = { english = {idea}{ideas},
-                     french  = [l']{idée}[les]{idées}, },
+                       french = [l']{idée}[les]{idées}, },
         (*\commandoption{Crefname}*) = { english = {Idea}{Ideas},
-                     french  = [L']{idée}[Les]{idées}, },
+                       french = [L']{idée}[Les]{idées}, },
     },
     (*\commandoption{parent counter}*) = section,
 }

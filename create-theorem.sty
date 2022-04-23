@@ -13,7 +13,7 @@
 \RequirePackage{l3keys2e}
 \ProvidesExplPackage
   {create-theorem}
-  {2022/04/16} {}
+  {2022/04/23} {}
   {Initializing theorem-like environments with multilingual support}
 
 \keys_define:nn { create-theorem }
@@ -512,7 +512,7 @@
   % #2 = language name
   % #3 = corresponding numbering style
   {
-    \tl_gset:cn { g_crthm_number_style_ #1 _tl } { #3 }
+    \tl_gset:cn { g_crthm_number_style_ #1 _tl } { \normalfont #3 }
   }
 
 
@@ -1101,6 +1101,49 @@
                     , tchinese    = {猜想}{猜想}
                     , japanese    = {予想}{予想}
                     , russian     = {Гипотеза}{Гипотезы}
+                  }
+  }
+
+\NameTheorem { construction }
+  {
+    , heading =   {
+                    , english     = Construction
+                    , french      = Construction
+                    , ngerman     = Konstruktion
+                    , italian     = Costruzione
+                    , portuguese  = Construção
+                    , brazilian   = Construção
+                    , spanish     = Construcción
+                    , schinese    = 构造
+                    , tchinese    = 構造
+                    , japanese    = 構造
+                    , russian     = Конструкция
+                  }
+    , crefname =  {
+                    , english     = {construction}{constructions}
+                    , french      = [la]{construction}[les]{constructions}
+                    , ngerman     = {Konstruktion}{Konstruktionen}
+                    , italian     = [la]{costruzione}[le]{costruzioni}
+                    , portuguese  = [a]{construção}[as]{construções}
+                    , brazilian   = [a]{construção}[as]{construções}
+                    , spanish     = [la]{construcción}[las]{construcciones}
+                    , schinese    = {构造}{构造}
+                    , tchinese    = {構造}{構造}
+                    , japanese    = {構造}{構造}
+                    , russian     = {конструкция}{конструкции}
+                  }
+    , Crefname =  {
+                    , english     = {Construction}{Constructions}
+                    , french      = [La]{construction}[Les]{constructions}
+                    , ngerman     = {Konstruktion}{Konstruktionen}
+                    , italian     = [La]{costruzione}[Le]{costruzioni}
+                    , portuguese  = [A]{construção}[As]{construções}
+                    , brazilian   = [A]{construção}[As]{construções}
+                    , spanish     = [La]{construcción}[Las]{construcciones}
+                    , schinese    = {构造}{构造}
+                    , tchinese    = {構造}{構造}
+                    , japanese    = {構造}{構造}
+                    , russian     = {Конструкция}{Конструкции}
                   }
   }
 
@@ -1746,6 +1789,49 @@
                     , tchinese    = {問題}{問題}
                     , japanese    = {問題}{問題}
                     , russian     = {Вопрос}{Вопросы}
+                  }
+  }
+
+\NameTheorem { recall }
+  {
+    , heading =   {
+                    , english     = Recall
+                    , french      = Rappel
+                    , ngerman     = Rückruf
+                    , italian     = Richiamo
+                    , portuguese  = Recordação
+                    , brazilian   = Recordação
+                    , spanish     = Recuerdo
+                    , schinese    = 回顾
+                    , tchinese    = 回顧
+                    , japanese    = 回顧
+                    , russian     = Напоминание
+                  }
+    , crefname =  {
+                    , english     = {recall}{recalls}
+                    , french      = [le]{rappel}[les]{rappels}
+                    , ngerman     = {Rückruf}{Rückrufe}
+                    , italian     = [il]{richiamo}[i]{richiami}
+                    , portuguese  = [a]{recordação}[as]{recordações}
+                    , brazilian   = [a]{recordação}[as]{recordações}
+                    , spanish     = [el]{recuerdo}[los]{recuerdos}
+                    , schinese    = {回顾}{回顾}
+                    , tchinese    = {回顧}{回顧}
+                    , japanese    = {回顧}{回顧}
+                    , russian     = {напоминание}{напоминания}
+                  }
+    , Crefname =  {
+                    , english     = {Recall}{Recalls}
+                    , french      = [Le]{rappel}[Les]{rappels}
+                    , ngerman     = {Rückruf}{Rückrufe}
+                    , italian     = [Il]{richiamo}[I]{richiami}
+                    , portuguese  = [A]{recordação}[As]{recordações}
+                    , brazilian   = [A]{recordação}[As]{recordações}
+                    , spanish     = [El]{recuerdo}[Los]{recuerdos}
+                    , schinese    = {回顾}{回顾}
+                    , tchinese    = {回顧}{回顧}
+                    , japanese    = {回顧}{回顧}
+                    , russian     = {Напоминание}{Напоминания}
                   }
   }
 
