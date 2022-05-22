@@ -97,7 +97,7 @@
 
 \begin{document}
 
-\def\PackageVersion{2022/04/23}
+\def\PackageVersion{2022/05/22}
 
 \title{\createtheorempackage{}\\\smallskip\itshape Initializing theorem-like environments with multilingual support}
 \author{Jinwen XU}
@@ -450,6 +450,7 @@ In each case, the two environments \texttt{idea} and \texttt{idea*} share the sa
 
 \begin{itemize}
     \item The current mechanism does not work well for German, a problem originated in the package \textsf{crefthe}. The author plans to adopt a more refined approach in a later version so as to support the various grammatical situations in German.
+    \item \createtheorempackage{} modifies some undocumented internal macros of \textsf{cleveref}, so the behaviour might not be stable if \textsf{cleveref} gets updated.
     \item There may be inaccuracies in the translation of those preset names.
 \end{itemize}
 
