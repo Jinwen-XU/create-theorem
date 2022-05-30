@@ -39,6 +39,11 @@
   }
 \ProcessKeysOptions { create-theorem }
 
+\hook_gput_code:nnn { package/thmtools/after } { crthm }
+  {
+    \let\thmt@autorefsetup\relax
+  }
+
 \RequirePackage { aliascnt }
 
 \bool_if:NT \l__crthm_nameinlink_bool
