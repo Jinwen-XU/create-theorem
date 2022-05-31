@@ -210,7 +210,7 @@ Supported keys are:
             \item The style of the \textquote{crefname}, you can specify the font, text style, color, etc.
             \item Synonymous names: \commandoption{crefname-style} \,$|$\, \commandoption{crefnamestyle}
         \end{itemize}
-    \item \commandoption{Crefname}
+    \item \commandoption{Crefname}\lstinline| = |\meta{configuration}
         \begin{itemize}
             \item The name for \lstinline|\Cref| the environment, its syntax is the same as that of \commandoption{crefname}.
             \item Also supports the syntax of \lstinline|\Crefthename|.
@@ -263,9 +263,10 @@ Supported keys are:
             \item Specifying the \lstinline|\theoremstyle| for the current environment.
             \item Synonymous names: \commandoption{apply style} \,$|$\, \commandoption{apply-style} \,$|$\, \commandoption{applystyle}
         \end{itemize}
-    \item \commandoption{qed}\lstinline| = |\meta{Q.E.D. symbol}
+    \item \commandoption{qed} or \commandoption{qed}\lstinline| = |\meta{Q.E.D. symbol}
         \begin{itemize}
             \item Specifying the Q.E.D. symbol for the current environment.
+            \item Note that the Q.E.D. symbol has already been put in math mode. If you want regular text such as \textquote{Q.E.D.}, you need to write \commandoption{qed}\lstinline| = \mathrm{Q.E.D.}|.
             \item Synonymous names: \commandoption{qed symbol} \,$|$\, \commandoption{qed-symbol} \,$|$\, \commandoption{qedsymbol}
         \end{itemize}
     \item \commandoption{parent counter}\lstinline| = |\meta{parent counter}
@@ -469,6 +470,7 @@ Sometimes you may encounter a theorem without a proof, in which case you might w
 The code above defines two new environments \lstinline|theorem+| and \lstinline|theorem+*| in addition to \lstinline|theorem| and \lstinline|theorem*|. The \lstinline|+| version behaves exactly the same as the usual version, except it has a Q.E.D. symbol.
 
 
+\bigskip
 \section{Known issues}
 
 \begin{itemize}
