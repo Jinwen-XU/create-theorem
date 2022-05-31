@@ -97,7 +97,7 @@
 
 \begin{document}
 
-\def\PackageVersion{2022/05/22}
+\def\PackageVersion{2022/05/31}
 
 \title{\createtheorempackage{}\\\smallskip\itshape Initializing theorem-like environments with multilingual support}
 \author{Jinwen XU}
@@ -263,6 +263,11 @@ Supported keys are:
             \item Specifying the \lstinline|\theoremstyle| for the current environment.
             \item Synonymous names: \commandoption{apply style} \,$|$\, \commandoption{apply-style} \,$|$\, \commandoption{applystyle}
         \end{itemize}
+    \item \commandoption{qed}\lstinline| = |\meta{Q.E.D. symbol}
+        \begin{itemize}
+            \item Specifying the Q.E.D. symbol for the current environment.
+            \item Synonymous names: \commandoption{qed symbol} \,$|$\, \commandoption{qed-symbol} \,$|$\, \commandoption{qedsymbol}
+        \end{itemize}
     \item \commandoption{parent counter}\lstinline| = |\meta{parent counter}
         \begin{itemize}
             \item Specifying the \meta{parent counter} for the current environment, \emph{i.e.}, numbering will restart whenever that sectional level is encountered.
@@ -324,6 +329,12 @@ Supported keys are:
             \item Same as \lstinline|\NameTheorem{|\meta{name of environment}\lstinline|}{|\meta{configuration}\lstinline|}|.
             \item Note that this configuration can overwrite those already specified in \lstinline|\NameTheorem|.
             \item Synonymous names: \commandoption{name-style} \,$|$\, \commandoption{namestyle}
+        \end{itemize}
+    \item \commandoption{qed}\lstinline| = |\meta{Q.E.D. symbol}
+        \begin{itemize}
+            \item Specifying the Q.E.D. symbol for the current environment.
+            \item Note that this configuration only works if you have already enabled the Q.E.D. symbol during the creating phase of the corresponding environment.
+            \item Synonymous names: \commandoption{qed symbol} \,$|$\, \commandoption{qed-symbol} \,$|$\, \commandoption{qedsymbol}
         \end{itemize}
     \item \commandoption{parent counter}\lstinline| = |\meta{parent counter}
         \begin{itemize}
@@ -446,11 +457,14 @@ This is the combination of the first two cases --- we need to create \texttt{ide
 In each case, the two environments \texttt{idea} and \texttt{idea*} share the same set of names.
 
 
+\clearpage
+
 \section{Known issues}
 
 \begin{itemize}
     \item The current mechanism does not work well for German, a problem originated in the package \textsf{crefthe}. The author plans to adopt a more refined approach in a later version so as to support the various grammatical situations in German.
     \item \createtheorempackage{} modifies some undocumented internal macros of \textsf{cleveref}, so the behaviour might not be stable if \textsf{cleveref} gets updated.
+    \item \createtheorempackage{} is not fully compatible with \textsf{thmtools}, especially its \texttt{autoref} module.
     \item There may be inaccuracies in the translation of those preset names.
 \end{itemize}
 

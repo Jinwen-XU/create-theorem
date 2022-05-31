@@ -662,6 +662,7 @@
     \keys_set:nn { create-theorem-naming } { #2 }
   }
 
+\cs_set_eq:NN \c_crthm_original_qedsymbol_tl \qedsymbol
 
 \bool_new:N \l__crthm_creating_apply_style_bool
 \tl_new:N   \l__crthm_creating_apply_style_tl
@@ -696,6 +697,17 @@
     , apply-style                 .value_required:n   = true
     , apply style                 .meta:n             = { style = { #1 } }
     , apply style                 .value_required:n   = true
+    , qed                         .code:n             = {
+                                                          \exp_args:Nx \hook_gput_code:nnn { env/ \l__crthm_current_env_tl /begin } { crthm } { \cs_set:Npn \qedsymbol { \ensuremath { #1 } } \pushQED{\qed} }
+                                                          \exp_args:Nx \hook_gput_code:nnn { env/ \l__crthm_current_env_tl /end } { crthm } { \popQED }
+                                                        }
+    , qed                         .default:n          = \c_crthm_original_qedsymbol_tl
+    , qed~symbol                  .meta:n             = { qed = #1 }
+    , qed~symbol                  .default:n          = \c_crthm_original_qedsymbol_tl
+    , qed-symbol                  .meta:n             = { qed = #1 }
+    , qed-symbol                  .default:n          = \c_crthm_original_qedsymbol_tl
+    , qed symbol                  .meta:n             = { qed = #1 }
+    , qed symbol                  .default:n          = \c_crthm_original_qedsymbol_tl
     , numberless                  .bool_set:N         = \l__crthm_creating_numberless_bool
     , create~starred~version      .bool_set:N         = \l__crthm_creating_create_starred_bool
     , create-starred-version      .meta:n             = { create~starred~version }
@@ -871,6 +883,16 @@
     , name-style                  .value_required:n   = true
     , name style                  .meta:n             = { name~style = { #1 } }
     , name style                  .value_required:n   = true
+    , qed                         .code:n             = {
+                                                          \exp_args:Nx \hook_gput_code:nnn { env/ \l__crthm_current_env_tl /begin } { crthm } { \cs_set:Npn \qedsymbol { \ensuremath { #1 } } }
+                                                        }
+    , qed                         .default:n          = \c_crthm_original_qedsymbol_tl
+    , qed~symbol                  .meta:n             = { qed = #1 }
+    , qed~symbol                  .default:n          = \c_crthm_original_qedsymbol_tl
+    , qed-symbol                  .meta:n             = { qed = #1 }
+    , qed-symbol                  .default:n          = \c_crthm_original_qedsymbol_tl
+    , qed symbol                  .meta:n             = { qed = #1 }
+    , qed symbol                  .default:n          = \c_crthm_original_qedsymbol_tl
     , parent~counter              .code:n             = { \crthm_counter_within:en { \l__crthm_current_env_tl } { #1 } }
     , parent~counter              .value_required:n   = true
     , parent-counter              .meta:n             = { parent~counter = { #1 } }
