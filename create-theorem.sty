@@ -13,7 +13,7 @@
 \RequirePackage{l3keys2e}
 \ProvidesExplPackage
   {create-theorem}
-  {2022/05/31} {}
+  {2022/06/01} {}
   {Initializing theorem-like environments with multilingual support}
 
 \keys_define:nn { create-theorem }
@@ -39,11 +39,6 @@
   }
 \ProcessKeysOptions { create-theorem }
 
-\hook_gput_code:nnn { package/thmtools/after } { crthm }
-  {
-    \let\thmt@autorefsetup\relax
-  }
-
 \RequirePackage { aliascnt }
 
 \bool_if:NT \l__crthm_nameinlink_bool
@@ -52,6 +47,14 @@
   }
 
 \RequirePackage { crefthe }
+
+
+\cs_gset_eq:NN \crthm_newtheorem:w \newtheorem
+
+\hook_gput_code:nnn { package/thmtools/after } { crthm }
+  {
+    \cs_gset_eq:NN \crthm_newtheorem:w \thmt@original@newtheorem
+  }
 
 
 % Users should consider appending their languages to this list as needed,
@@ -813,10 +816,10 @@
                   }
                 \bool_if:NTF \l__crthm_creating_numberless_bool
                   {
-                    \newtheorem*{ #1 _crthm_regional } { \tl_use:c { g_crthm_name_heading_ #1 _ \languagename _tl } }
+                    \crthm_newtheorem:w*{ #1 _crthm_regional } { \tl_use:c { g_crthm_name_heading_ #1 _ \languagename _tl } }
                   }
                   {
-                    \newtheorem { #1 _crthm_regional } [#1] { \tl_use:c { g_crthm_name_heading_ #1 _ \languagename _tl } }
+                    \crthm_newtheorem:w { #1 _crthm_regional } [#1] { \tl_use:c { g_crthm_name_heading_ #1 _ \languagename _tl } }
                   }
                 \group_end:
                 \NewDocumentEnvironment { #1 } { O{} }
@@ -841,7 +844,7 @@
                   }
                 \bool_if:NT \l__crthm_creating_create_starred_bool
                   {
-                    \newtheorem*{ #1 * } { \tl_use:c { g_crthm_name_heading_ #1 _ \languagename _tl } }
+                    \crthm_newtheorem:w*{ #1 * } { \tl_use:c { g_crthm_name_heading_ #1 _ \languagename _tl } }
                   }
                 \keys_set:nn { create-theorem-creating / counter-management } { #2 }
               }
