@@ -456,8 +456,18 @@ This is the combination of the first two cases --- we need to create \texttt{ide
 \smallskip
 In each case, the two environments \texttt{idea} and \texttt{idea*} share the same set of names.
 
+\subsection{The \emph{proofless} version -- theorems with a Q.E.D. symbol}
 
-\clearpage
+Sometimes you may encounter a theorem without a proof, in which case you might want a Q.E.D. symbol when the theorem is finished. This can be easily achieved via:
+
+\begin{code}
+\CreateTheorem { theorem } { (*\commandoption{create starred version}*) }
+\CreateTheorem { theorem+ } { (*\commandoption{copy existed}*) = theorem, (*\commandoption{qed}*) }
+\CreateTheorem { theorem+* } { (*\commandoption{copy existed}*) = theorem*, (*\commandoption{qed}*) }
+\end{code}
+
+The code above defines two new environments \lstinline|theorem+| and \lstinline|theorem+*| in addition to \lstinline|theorem| and \lstinline|theorem*|. The \lstinline|+| version behaves exactly the same as the usual version, except it has a Q.E.D. symbol.
+
 
 \section{Known issues}
 
