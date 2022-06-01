@@ -49,11 +49,12 @@
 \RequirePackage { crefthe }
 
 
-\cs_gset_eq:NN \crthm_newtheorem:w \newtheorem
-
-\hook_gput_code:nnn { package/thmtools/after } { crthm }
+\IfPackageLoadedTF { thmtools }
   {
     \cs_gset_eq:NN \crthm_newtheorem:w \thmt@original@newtheorem
+  }
+  {
+    \cs_gset_eq:NN \crthm_newtheorem:w \newtheorem
   }
 
 
