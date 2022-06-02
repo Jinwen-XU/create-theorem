@@ -13,7 +13,7 @@
 \RequirePackage{l3keys2e}
 \ProvidesExplPackage
   {create-theorem}
-  {2022/06/01} {}
+  {2022/06/02} {}
   {Initializing theorem-like environments with multilingual support}
 
 \keys_define:nn { create-theorem }
@@ -822,6 +822,10 @@
                   {
                     \crthm_newtheorem:w { #1 _crthm_regional } [#1] { \tl_use:c { g_crthm_name_heading_ #1 _ \languagename _tl } }
                   }
+                \bool_if:NT \l__crthm_creating_create_starred_bool
+                  {
+                    \crthm_newtheorem:w*{ #1 * } { \tl_use:c { g_crthm_name_heading_ #1 _ \languagename _tl } }
+                  }
                 \group_end:
                 \NewDocumentEnvironment { #1 } { O{} }
                   % In "regionalref" mode, the counter received by the referencing system is "#1 _crthm_regional"
@@ -842,10 +846,6 @@
                   }
                   {
                     \end{ #1 _crthm_regional }
-                  }
-                \bool_if:NT \l__crthm_creating_create_starred_bool
-                  {
-                    \crthm_newtheorem:w*{ #1 * } { \tl_use:c { g_crthm_name_heading_ #1 _ \languagename _tl } }
                   }
                 \keys_set:nn { create-theorem-creating / counter-management } { #2 }
               }
@@ -872,6 +872,7 @@
 \cs_new:Nn \crthm_counter_alias:nn
   {
     \cs_set_eq:cc { c@ #1 } { c@ #2 }
+    \cs_set_eq:cc { cl@ #1 } { cl@ #2 }
     \cs_set_eq:cc { the #1 } { the #2 }
   }
 \cs_generate_variant:Nn \crthm_counter_alias:nn { en }
