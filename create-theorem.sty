@@ -941,8 +941,23 @@
   {
     \clist_map_inline:nn { #1 }
       {
-        \tl_set:Nn \l__crthm_current_env_tl { ##1 }
+        \prop_if_in:NnTF \l_crthm_binding_prop { ##1 }
+          {
+            \prop_get:NnN \l_crthm_binding_prop { ##1 } \l__crthm_current_env_tl
+          }
+          {
+            \tl_set:Nn \l__crthm_current_env_tl { ##1 }
+          }
         \keys_set:nn { create-theorem-setting } { #2 }
+      }
+  }
+
+\prop_new:N \l_crthm_binding_prop
+\NewDocumentCommand \SetTheoremBinding { m m }
+  {
+    \clist_map_inline:nn { #1 }
+      {
+        \prop_put:Nxx \l_crthm_binding_prop { ##1 } { #2 }
       }
   }
 
