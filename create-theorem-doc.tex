@@ -97,7 +97,7 @@
 
 \begin{document}
 
-\def\PackageVersion{2022/06/01}
+\def\PackageVersion{2022/06/15}
 
 \title{\createtheorempackage{}\\\smallskip\itshape Initializing theorem-like environments with multilingual support}
 \author{Jinwen XU}
@@ -286,6 +286,7 @@ Supported keys are:
     \item \commandoption{create starred version}
         \begin{itemize}
             \item Defining a corresponding starred (unnumbered) version of the current environment.
+            \item It must be placed \emph{before} \commandoption{qed} if you want the starred version to have a Q.E.D symbol.
             \item Synonymous names: \commandoption{create-starred-version} \,$|$\, \commandoption{createstarredversion} \,$|$\, \\\phantom{Synonymous names: }\commandoption{create numberless version} \,$|$\, \commandoption{create-numberless-version} \\\phantom{Synonymous names: }\,$|$ \commandoption{createnumberlessversion}
         \end{itemize}
     \item \commandoption{copy existed}\lstinline| = |\meta{existed environment}
@@ -476,7 +477,8 @@ The code above defines two new environments \lstinline|theorem+| and \lstinline|
 \begin{itemize}
     \item The current mechanism does not work well for German, a problem originated in the package \textsf{crefthe}. The author plans to adopt a more refined approach in a later version so as to support the various grammatical situations in German.
     \item \createtheorempackage{} modifies some undocumented internal macros of \textsf{cleveref}, so the behaviour might not be stable if \textsf{cleveref} gets updated.
-    \item There may be inaccuracies in the translation of those preset names.
+    \item The counter aliasing function is still not perfect, (sometimes) causing incorrect ordering in the result of \lstinline|\cref|.
+    \item There might be inaccuracies in the translation of those preset names.
 \end{itemize}
 
 \medskip

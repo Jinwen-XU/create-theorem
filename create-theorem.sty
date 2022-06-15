@@ -13,7 +13,7 @@
 \RequirePackage{l3keys2e}
 \ProvidesExplPackage
   {create-theorem}
-  {2022/06/02} {}
+  {2022/06/15} {}
   {Initializing theorem-like environments with multilingual support}
 
 \keys_define:nn { create-theorem }
@@ -38,8 +38,6 @@
     , unknown               .code:n             = {}
   }
 \ProcessKeysOptions { create-theorem }
-
-\RequirePackage { aliascnt }
 
 \bool_if:NT \l__crthm_nameinlink_bool
   {
@@ -244,7 +242,7 @@
       {% "originalref" mode
         \tl_if_exist:cF { c@ #1 _crthm_original_ #2 }
           {
-            \newaliascnt { #1 _crthm_original_ #2 } { #1 }
+            \crthm_counter_alias:nn { #1 _crthm_original_ #2 } { #1 }
             \hook_gput_code:nnn { begindocument/before } { crthm }
               {
                 \cs_set_eq:cc { the #1 _crthm_original_ #2 } { the #1 }
@@ -704,6 +702,11 @@
     , qed                         .code:n             = {
                                                           \exp_args:Nx \hook_gput_code:nnn { env/ \l__crthm_current_env_tl /begin } { crthm } { \cs_set:Npn \qedsymbol { \ensuremath { #1 } } \pushQED{\qed} }
                                                           \exp_args:Nx \hook_gput_code:nnn { env/ \l__crthm_current_env_tl /end } { crthm } { \popQED }
+                                                          \bool_if:NT \l__crthm_creating_create_starred_bool
+                                                            {
+                                                              \exp_args:Nx \hook_gput_code:nnn { env/ \l__crthm_current_env_tl * /begin } { crthm } { \cs_set:Npn \qedsymbol { \ensuremath { #1 } } \pushQED{\qed} }
+                                                              \exp_args:Nx \hook_gput_code:nnn { env/ \l__crthm_current_env_tl * /end } { crthm } { \popQED }
+                                                            }
                                                         }
     , qed                         .default:n          = \c_crthm_original_qedsymbol_tl
     , qed~symbol                  .meta:n             = { qed = #1 }
@@ -871,9 +874,17 @@
 
 \cs_new:Nn \crthm_counter_alias:nn
   {
-    \cs_set_eq:cc { c@ #1 } { c@ #2 }
-    \cs_set_eq:cc { cl@ #1 } { cl@ #2 }
-    \cs_set_eq:cc { the #1 } { the #2 }
+    \cs_if_exist:cTF { c@ #2 }
+      {
+        \cs_gset_eq:cc { c@ #1 } { c@ #2 }
+        \cs_gset_eq:cc { the #1 } { the #2 }
+        \cs_gset_eq:cc { theH #1 } { theH #2 }
+        \cs_gset_eq:cc { p@ #1 } { p@ #2 }
+        \cs_gset_eq:cc { cl@ #1 } { cl@ #2 }
+      }
+      {
+        \@nocounterr { #2 }
+      }
   }
 \cs_generate_variant:Nn \crthm_counter_alias:nn { en }
 
