@@ -9,8 +9,7 @@
 %%
 %%    http://www.latex-project.org/lppl.txt
 %%
-\NeedsTeXFormat{LaTeX2e}[2020-10-01]
-\RequirePackage{l3keys2e}
+\NeedsTeXFormat{LaTeX2e}[2022-06-01]
 \ProvidesExplPackage
   {create-theorem}
   {2022/06/15} {}
@@ -37,7 +36,7 @@
     , no preset names       .bool_set_inverse:N = \l__crthm_presetname_bool
     , unknown               .code:n             = {}
   }
-\ProcessKeysOptions { create-theorem }
+\ProcessKeyOptions [ create-theorem ]
 
 \bool_if:NT \l__crthm_nameinlink_bool
   {
