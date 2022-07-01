@@ -12,7 +12,7 @@
 \NeedsTeXFormat{LaTeX2e}[2022-06-01]
 \ProvidesExplPackage
   {create-theorem}
-  {2022/06/15} {}
+  {2022/07/01} {}
   {Initializing theorem-like environments with multilingual support}
 
 \keys_define:nn { create-theorem }
@@ -609,14 +609,16 @@
         \regex_split:nnN { \s* ; \s* } { #2 } { \l_tmpa_seq }
         \seq_map_inline:Nn \l_tmpa_seq
           { % ####1 = existed environments
-            \bool_if:NT \l_tmpa_bool
-              { % use the first environment's definite article as that of the combined environment
+            % Here we use the definite article of the last environment as that of the combined environment
+            % Uncomment the lines below if you wish to use the definite article of the first environment
+            % \bool_if:NT \l_tmpa_bool
+            %   {
                 \tl_gset:cn { g_crthm_saved_name_cref_article_singular_ #1 _ ##1 _tl } { \tl_use:c { g_crthm_core_name_cref_article_singular_ ####1 _ ##1 _tl } }
                 \tl_gset:cn { g_crthm_saved_name_cref_article_plural_ #1 _ ##1 _tl } { \tl_use:c { g_crthm_core_name_cref_article_plural_ ####1 _ ##1 _tl } }
                 \tl_gset:cn { g_crthm_saved_name_Cref_article_singular_ #1 _ ##1 _tl } { \tl_use:c { g_crthm_core_name_Cref_article_singular_ ####1 _ ##1 _tl } }
                 \tl_gset:cn { g_crthm_saved_name_Cref_article_plural_ #1 _ ##1 _tl } { \tl_use:c { g_crthm_core_name_Cref_article_plural_ ####1 _ ##1 _tl } }
-                \bool_set_false:N \l_tmpa_bool
-              }
+            %     \bool_set_false:N \l_tmpa_bool
+            %   }
             \seq_gput_right:cn { g_crthm_name_heading_ #1 _ ##1 _seq } { \tl_use:c { g_crthm_name_heading_ ####1 _ ##1 _tl } }
             \seq_gput_right:cn { g_crthm_name_cref_singular_ #1 _ ##1 _seq } { \tl_use:c { g_crthm_name_cref_singular_ ####1 _ ##1 _tl } }
             \seq_gput_right:cn { g_crthm_name_cref_plural_ #1 _ ##1 _seq } { \tl_use:c { g_crthm_name_cref_plural_ ####1 _ ##1 _tl } }

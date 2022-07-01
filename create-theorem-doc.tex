@@ -97,7 +97,7 @@
 
 \begin{document}
 
-\def\PackageVersion{2022/06/15}
+\def\PackageVersion{2022/07/01}
 
 \title{\createtheorempackage{}\\\smallskip\itshape Initializing theorem-like environments with multilingual support}
 \author{Jinwen XU}
@@ -139,6 +139,7 @@ It has the following options:
     \item \packageoption{name as context}
         \begin{itemize}
             \item When referencing, the resulted names correspond to the current context. For example, the English names will be displayed when referencing a theorem-like environment in English context, no matter which linguistic context the original environment is in.
+            \item This is the default behavior.
             \item Synonymous names: \packageoption{name-as-context} \,$|$\, \packageoption{nameascontext} \,$|$\, \packageoption{regionalref}
         \end{itemize}
     \item \packageoption{name as is}
@@ -157,6 +158,8 @@ It has the following options:
             \item Synonymous names: \packageoption{no-preset-names} \,$|$\, \packageoption{nopresetnames}
         \end{itemize}
 \end{itemize}
+
+\clearpage
 
 \section{How to use it}
 
@@ -228,6 +231,7 @@ Supported keys are:
     \item \commandoption{use name}\lstinline| = |\meta{list of existed environment(s) separated with semicolon \textquote{ ; }}
         \begin{itemize}
             \item Use the name(s) and style(s) of given environment(s). If there are multiple ones specified, the result would be a string combining the names, separated with \textquote{\texttt{-}}.
+            \item The definite articles (if exist) are chosen to be that of the last given environment.
             \item Synonymous names: \commandoption{combined} \,$|$\, \commandoption{use-name} \,$|$\, \commandoption{usename}
         \end{itemize}
 \end{itemize}
@@ -292,6 +296,7 @@ Supported keys are:
     \item \commandoption{copy existed}\lstinline| = |\meta{existed environment}
         \begin{itemize}
             \item Defining the current environment to be the same as \meta{existed environment}.
+\clearpage
             \item This key is usually useful in the following two situations:
                 \begin{enumerate}
                     \item To use a more concise name. For example, with \lstinline|\CreateTheorem{thm}{|\commandoption{copy \\existed} \lstinline|= theorem}|, one can then use the name \texttt{thm} to write theorems.
