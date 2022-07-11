@@ -12,7 +12,7 @@
 \NeedsTeXFormat{LaTeX2e}[2022-06-01]
 \ProvidesExplPackage
   {create-theorem}
-  {2022/07/01} {}
+  {2022/07/11} {}
   {Initializing theorem-like environments with multilingual support}
 
 \keys_define:nn { create-theorem }
@@ -214,10 +214,10 @@
     % It is assumed that when #3 is empty, so is #5
     \tl_if_blank:eTF { #3 }
       {
-        \tl_gset:cn { g_crthm_core_name_ #7 ref_article_singular_ #1 _ #2 _tl } { \skip_horizontal:n { -.75ex } }
-        \tl_gset:cn { g_crthm_core_name_ #7 ref_article_plural_ #1 _ #2 _tl } { \skip_horizontal:n { -.75ex } }
-        \tl_gset:cn { g_crthm_name_ #7 ref_article_singular_ #1 _ #2 _tl } { \crefthemark { \skip_horizontal:n { -.75ex } } }
-        \tl_gset:cn { g_crthm_name_ #7 ref_article_plural_ #1 _ #2 _tl } { \crefthemark { \skip_horizontal:n { -.75ex } } }
+        \tl_gset:cn { g_crthm_core_name_ #7 ref_article_singular_ #1 _ #2 _tl } { }
+        \tl_gset:cn { g_crthm_core_name_ #7 ref_article_plural_ #1 _ #2 _tl } { }
+        \tl_gset:cn { g_crthm_name_ #7 ref_article_singular_ #1 _ #2 _tl } { \nobreak \crefthemark { \skip_horizontal:n { -.75ex } } \nobreak }
+        \tl_gset:cn { g_crthm_name_ #7 ref_article_plural_ #1 _ #2 _tl } { \nobreak \crefthemark { \skip_horizontal:n { -.75ex } } \nobreak }
       }
       {
         \tl_gset:cn { g_crthm_core_name_ #7 ref_article_singular_ #1 _ #2 _tl } { #3 }
@@ -231,8 +231,21 @@
         \tl_new:c { g_crthm_style_ #7 refname_ #1 _ #2 _tl }
       }
 
-    \tl_gset:cn { g_crthm_name_ #7 ref_singular_ #1 _ #2 _tl } { \tl_use:c { g_crthm_style_ #7 refname_ #1 _ #2 _tl } { #4 } }
-    \tl_gset:cn { g_crthm_name_ #7 ref_plural_ #1 _ #2 _tl } { \tl_use:c { g_crthm_style_ #7 refname_ #1 _ #2 _tl } { #6 } }
+    \tl_if_blank:eTF { #4 }
+      {
+        \tl_gset:cn { g_crthm_name_ #7 ref_singular_ #1 _ #2 _tl } { \nobreak \skip_horizontal:n { -.25ex } \nobreak }
+      }
+      {
+        \tl_gset:cn { g_crthm_name_ #7 ref_singular_ #1 _ #2 _tl } { \tl_use:c { g_crthm_style_ #7 refname_ #1 _ #2 _tl } { #4 } }
+      }
+
+    \tl_if_blank:eTF { #6 }
+      {
+        \tl_gset:cn { g_crthm_name_ #7 ref_plural_ #1 _ #2 _tl } { \nobreak \skip_horizontal:n { -.25ex } \nobreak }
+      }
+      {
+        \tl_gset:cn { g_crthm_name_ #7 ref_plural_ #1 _ #2 _tl } { \tl_use:c { g_crthm_style_ #7 refname_ #1 _ #2 _tl } { #6 } }
+      }
 
     \bool_if:NTF \l__crthm_regionalref_bool
       {% "regionalref" mode
@@ -613,10 +626,10 @@
             % Uncomment the lines below if you wish to use the definite article of the first environment
             % \bool_if:NT \l_tmpa_bool
             %   {
-                \tl_gset:cn { g_crthm_saved_name_cref_article_singular_ #1 _ ##1 _tl } { \tl_use:c { g_crthm_core_name_cref_article_singular_ ####1 _ ##1 _tl } }
-                \tl_gset:cn { g_crthm_saved_name_cref_article_plural_ #1 _ ##1 _tl } { \tl_use:c { g_crthm_core_name_cref_article_plural_ ####1 _ ##1 _tl } }
-                \tl_gset:cn { g_crthm_saved_name_Cref_article_singular_ #1 _ ##1 _tl } { \tl_use:c { g_crthm_core_name_Cref_article_singular_ ####1 _ ##1 _tl } }
-                \tl_gset:cn { g_crthm_saved_name_Cref_article_plural_ #1 _ ##1 _tl } { \tl_use:c { g_crthm_core_name_Cref_article_plural_ ####1 _ ##1 _tl } }
+                \tl_gset_eq:cc { g_crthm_saved_name_cref_article_singular_ #1 _ ##1 _tl } { g_crthm_core_name_cref_article_singular_ ####1 _ ##1 _tl }
+                \tl_gset_eq:cc { g_crthm_saved_name_cref_article_plural_ #1 _ ##1 _tl } { g_crthm_core_name_cref_article_plural_ ####1 _ ##1 _tl }
+                \tl_gset_eq:cc { g_crthm_saved_name_Cref_article_singular_ #1 _ ##1 _tl } { g_crthm_core_name_Cref_article_singular_ ####1 _ ##1 _tl }
+                \tl_gset_eq:cc { g_crthm_saved_name_Cref_article_plural_ #1 _ ##1 _tl } { g_crthm_core_name_Cref_article_plural_ ####1 _ ##1 _tl }
             %     \bool_set_false:N \l_tmpa_bool
             %   }
             \seq_gput_right:cn { g_crthm_name_heading_ #1 _ ##1 _seq } { \tl_use:c { g_crthm_name_heading_ ####1 _ ##1 _tl } }
@@ -625,25 +638,45 @@
             \seq_gput_right:cn { g_crthm_name_Cref_singular_ #1 _ ##1 _seq } { \tl_use:c { g_crthm_name_Cref_singular_ ####1 _ ##1 _tl } }
             \seq_gput_right:cn { g_crthm_name_Cref_plural_ #1 _ ##1 _seq } { \tl_use:c { g_crthm_name_Cref_plural_ ####1 _ ##1 _tl } }
             % set the numbering style to be the same as the last environment
-            \tl_gset:cn { g_crthm_number_style_ #1 _tl } { \tl_use:c { g_crthm_number_style_ ####1 _tl } }
+            \tl_gset_eq:cc { g_crthm_number_style_ #1 _tl } { g_crthm_number_style_ ####1 _tl }
           }
         % set heading name for the combined environment
         \tl_gset:cn { g_crthm_name_heading_ #1 _ ##1 _tl } { \seq_use:cn { g_crthm_name_heading_ #1 _ ##1 _seq } { \g_crthm_combined_name_sep_tl } }
         % set crefname for the combined environment
-        \__crthm_set_name_crefname:nnn { #1 } { ##1 }
+        \tl_if_empty:cTF { g_crthm_saved_name_cref_article_singular_ #1 _ ##1 _tl }
           {
-            [ \tl_use:c { g_crthm_saved_name_cref_article_singular_ #1 _ ##1 _tl } ]
-            { \seq_use:cn { g_crthm_name_cref_singular_ #1 _ ##1 _seq } { \g_crthm_combined_name_sep_tl } }
-            [ \tl_use:c { g_crthm_saved_name_cref_article_plural_ #1 _ ##1 _tl } ]
-            { \seq_use:cn { g_crthm_name_cref_plural_ #1 _ ##1 _seq } { \g_crthm_combined_name_sep_tl } }
+            \__crthm_set_name_crefname:nnn { #1 } { ##1 }
+              {
+                { \seq_use:cn { g_crthm_name_cref_singular_ #1 _ ##1 _seq } { \g_crthm_combined_name_sep_tl } }
+                { \seq_use:cn { g_crthm_name_cref_plural_ #1 _ ##1 _seq } { \g_crthm_combined_name_sep_tl } }
+              }
+          }
+          {
+            \__crthm_set_name_crefname:nnn { #1 } { ##1 }
+              {
+                [ \tl_use:c { g_crthm_saved_name_cref_article_singular_ #1 _ ##1 _tl } ]
+                { \seq_use:cn { g_crthm_name_cref_singular_ #1 _ ##1 _seq } { \g_crthm_combined_name_sep_tl } }
+                [ \tl_use:c { g_crthm_saved_name_cref_article_plural_ #1 _ ##1 _tl } ]
+                { \seq_use:cn { g_crthm_name_cref_plural_ #1 _ ##1 _seq } { \g_crthm_combined_name_sep_tl } }
+              }
           }
         % set Crefname for the combined environment
-        \__crthm_set_name_Crefname:nnn { #1 } { ##1 }
+        \tl_if_empty:cTF { g_crthm_saved_name_Cref_article_singular_ #1 _ ##1 _tl }
           {
-            [ \tl_use:c { g_crthm_saved_name_Cref_article_singular_ #1 _ ##1 _tl } ]
-            { \seq_use:cn { g_crthm_name_Cref_singular_ #1 _ ##1 _seq } { \g_crthm_combined_name_sep_tl } }
-            [ \tl_use:c { g_crthm_saved_name_Cref_article_plural_ #1 _ ##1 _tl } ]
-            { \seq_use:cn { g_crthm_name_Cref_plural_ #1 _ ##1 _seq } { \g_crthm_combined_name_sep_tl } }
+            \__crthm_set_name_Crefname:nnn { #1 } { ##1 }
+              {
+                { \seq_use:cn { g_crthm_name_Cref_singular_ #1 _ ##1 _seq } { \g_crthm_combined_name_sep_tl } }
+                { \seq_use:cn { g_crthm_name_Cref_plural_ #1 _ ##1 _seq } { \g_crthm_combined_name_sep_tl } }
+              }
+          }
+          {
+            \__crthm_set_name_Crefname:nnn { #1 } { ##1 }
+              {
+                [ \tl_use:c { g_crthm_saved_name_Cref_article_singular_ #1 _ ##1 _tl } ]
+                { \seq_use:cn { g_crthm_name_Cref_singular_ #1 _ ##1 _seq } { \g_crthm_combined_name_sep_tl } }
+                [ \tl_use:c { g_crthm_saved_name_Cref_article_plural_ #1 _ ##1 _tl } ]
+                { \seq_use:cn { g_crthm_name_Cref_plural_ #1 _ ##1 _seq } { \g_crthm_combined_name_sep_tl } }
+              }
           }
       }
   }
