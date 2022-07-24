@@ -12,7 +12,7 @@
 \NeedsTeXFormat{LaTeX2e}[2022-06-01]
 \ProvidesExplPackage
   {create-theorem}
-  {2022/07/11} {}
+  {2022/07/24} {}
   {Initializing theorem-like environments with multilingual support}
 
 \keys_define:nn { create-theorem }
@@ -216,8 +216,8 @@
       {
         \tl_gset:cn { g_crthm_core_name_ #7 ref_article_singular_ #1 _ #2 _tl } { }
         \tl_gset:cn { g_crthm_core_name_ #7 ref_article_plural_ #1 _ #2 _tl } { }
-        \tl_gset:cn { g_crthm_name_ #7 ref_article_singular_ #1 _ #2 _tl } { \nobreak \crefthemark { \skip_horizontal:n { -.75ex } } \nobreak }
-        \tl_gset:cn { g_crthm_name_ #7 ref_article_plural_ #1 _ #2 _tl } { \nobreak \crefthemark { \skip_horizontal:n { -.75ex } } \nobreak }
+        \tl_gset:cn { g_crthm_name_ #7 ref_article_singular_ #1 _ #2 _tl } { \nobreak \crefthemark { \skip_horizontal:n { -\crefthe_width_of_space_dim } } \nobreak }
+        \tl_gset:cn { g_crthm_name_ #7 ref_article_plural_ #1 _ #2 _tl } { \nobreak \crefthemark { \skip_horizontal:n { -\crefthe_width_of_space_dim } } \nobreak }
       }
       {
         \tl_gset:cn { g_crthm_core_name_ #7 ref_article_singular_ #1 _ #2 _tl } { #3 }
@@ -233,7 +233,7 @@
 
     \tl_if_blank:eTF { #4 }
       {
-        \tl_gset:cn { g_crthm_name_ #7 ref_singular_ #1 _ #2 _tl } { \nobreak \skip_horizontal:n { -.25ex } \nobreak }
+        \tl_gset:cn { g_crthm_name_ #7 ref_singular_ #1 _ #2 _tl } { \nobreak \skip_horizontal:n { -\crefthe_width_of_space_dim } \nobreak }
       }
       {
         \tl_gset:cn { g_crthm_name_ #7 ref_singular_ #1 _ #2 _tl } { \tl_use:c { g_crthm_style_ #7 refname_ #1 _ #2 _tl } { #4 } }
@@ -241,7 +241,7 @@
 
     \tl_if_blank:eTF { #6 }
       {
-        \tl_gset:cn { g_crthm_name_ #7 ref_plural_ #1 _ #2 _tl } { \nobreak \skip_horizontal:n { -.25ex } \nobreak }
+        \tl_gset:cn { g_crthm_name_ #7 ref_plural_ #1 _ #2 _tl } { \nobreak \skip_horizontal:n { -\crefthe_width_of_space_dim } \nobreak }
       }
       {
         \tl_gset:cn { g_crthm_name_ #7 ref_plural_ #1 _ #2 _tl } { \tl_use:c { g_crthm_style_ #7 refname_ #1 _ #2 _tl } { #6 } }
