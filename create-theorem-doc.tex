@@ -39,6 +39,8 @@
     texcsstyle =* \color{code-main},
     moretexcs =
       {
+        ExplSyntaxOn,ExplSyntaxOff,
+        NewDocumentCommand,NewDocumentEnvironment,
         cref,crefname,
         Cref,Crefname,
         crefformat,
@@ -47,9 +49,11 @@
         crefthemark,
         selectlanguage,
         theoremstyle,
+        proofname,
         NameTheorem,
         CreateTheorem,
         SetTheorem,
+        SetTheoremBinding,
       }
 }
 \lstset{% LaTeX3 commands
@@ -57,6 +61,9 @@
     texcsstyle =* \color{code-expl3},
     moretexcs =
       {
+        tl_new:N,
+        tl_set:Nn,
+        cs_undefine:c,
       }
 }
 \lstnewenvironment{code}{\setstretch{1.05}\LocallyStopLineNumbers}{\ResumeLineNumbers\vspace{-.3\baselineskip}\vspace{-.5\parskip}}
@@ -97,7 +104,7 @@
 
 \begin{document}
 
-\def\PackageVersion{2022/07/31}
+\def\PackageVersion{2022/08/04}
 
 \title{\createtheorempackage{}\\\smallskip\itshape Initializing theorem-like environments with multilingual support}
 \author{Jinwen XU}
@@ -357,6 +364,12 @@ Supported keys are:
         \end{itemize}
 \end{itemize}
 
+\medskip
+In some cases, you may define an internal environment (for example, a generic version) first and then use it to define the final environment. You may wish to hide the internal names from the users so that they can use \lstinline|\SetTheorem| with the name of the final environments. This can be done with the following command:
+\begin{code}
+\SetTheoremBinding{(*\meta{list of the name of environments}*)}{(*\meta{the environment to bind with}*)}
+\end{code}
+
 \bigskip
 \begin{center}
     \itshape
@@ -366,9 +379,9 @@ Supported keys are:
 
 \section{Examples}
 
-\subsection{The environment \texttt{idea}}
+\subsection{The environment {\normalfont\texttt{idea}}}
 
-First, let's getting familiar with these two commands by creating the environment \texttt{idea}.
+First, let's getting familiar with these two commands by creating the environment {\normalfont\texttt{idea}}.
 
 \begin{code}
 \NameTheorem{idea}{
@@ -409,16 +422,16 @@ This is not exciting at all. Now, let's say we are writing a bilingual note in E
 }
 \end{code}
 
-With this, if you use \lstinline|\selectlanguage{french}|, the \texttt{idea} environment shall be automatically displayed as \textquote{Idée}. And if you \lstinline|\crefthe| it, the definite article and the name showed up properly just as expected.
+With this, if you use \lstinline|\selectlanguage{french}|, the {\normalfont\texttt{idea}} environment shall be automatically displayed as \textquote{Idée}. And if you \lstinline|\crefthe| it, the definite article and the name showed up properly just as expected.
 
 \medskip
-Next we shall deal with the numbering problem. Let's continue to use this environment \texttt{idea} for demonstration -- suppose that we have set the names up with \lstinline|\NameTheorem|.
+Next we shall deal with the numbering problem. Let's continue to use this environment {\normalfont\texttt{idea}} for demonstration -- suppose that we have set the names up with \lstinline|\NameTheorem|.
 
 \subsection{Let's play with numbering}
 
 Remember the exercise I left you in the previous section? Let's do it together now.
 
-\subsubsection{Numbered \texttt{idea} and numbered \texttt{idea*}}
+\subsubsection{Numbered {\normalfont\texttt{idea}} and numbered {\normalfont\texttt{idea*}}}
 
 This is easy, \commandoption{copy existed} suffices:
 
@@ -427,7 +440,7 @@ This is easy, \commandoption{copy existed} suffices:
 \CreateTheorem{idea*}{(*\commandoption{copy existed}*) = idea}
 \end{code}
 
-\subsubsection{Numbered \texttt{idea} and unnumbered \texttt{idea*}}
+\subsubsection{Numbered {\normalfont\texttt{idea}} and unnumbered {\normalfont\texttt{idea*}}}
 
 This is the easiest, \commandoption{create starred version} will do.
 
@@ -438,11 +451,11 @@ This is the easiest, \commandoption{create starred version} will do.
 }
 \end{code}
 
-Notice that you cannot use \lstinline|\CreateTheorem{idea*}{|\commandoption{numberless}\lstinline|}| here, since we don't have names defined for \texttt{idea*}.
+Notice that you cannot use \lstinline|\CreateTheorem{idea*}{|\commandoption{numberless}\lstinline|}| here, since we don't have names defined for {\normalfont\texttt{idea*}}.
 
-\subsubsection{Unnumbered \texttt{idea} and numbered \texttt{idea*}}
+\subsubsection{Unnumbered {\normalfont\texttt{idea}} and numbered {\normalfont\texttt{idea*}}}
 
-This is a bit tricky: by default we can only create numbered \texttt{idea} or unnumbered \texttt{idea*}, and the question is how to switch them. We shall need an intermediary.
+This is a bit tricky: by default we can only create numbered {\normalfont\texttt{idea}} or unnumbered {\normalfont\texttt{idea*}}, and the question is how to switch them. We shall need an intermediary.
 
 \begin{code}
 \CreateTheorem{idea}{(*\commandoption{create starred version}*)}
@@ -451,9 +464,9 @@ This is a bit tricky: by default we can only create numbered \texttt{idea} or un
 \CreateTheorem{idea}{(*\commandoption{copy existed}*) = idea-temp}
 \end{code}
 
-\subsubsection{Unnumbered \texttt{idea} and unnumbered \texttt{idea*}}
+\subsubsection{Unnumbered {\normalfont\texttt{idea}} and unnumbered {\normalfont\texttt{idea*}}}
 
-This is the combination of the first two cases --- we need to create \texttt{idea*} first and then copy it to \texttt{idea}:
+This is the combination of the first two cases --- we need to create {\normalfont\texttt{idea*}} first and then copy it to {\normalfont\texttt{idea}}:
 
 \begin{code}
 \CreateTheorem{idea}{(*\commandoption{create starred version}*)}
@@ -461,7 +474,7 @@ This is the combination of the first two cases --- we need to create \texttt{ide
 \end{code}
 
 \smallskip
-In each case, the two environments \texttt{idea} and \texttt{idea*} share the same set of names.
+In each case, the two environments {\normalfont\texttt{idea}} and {\normalfont\texttt{idea*}} share the same set of names.
 
 \subsection{The \emph{proofless} version -- theorems with a Q.E.D. symbol}
 
@@ -473,7 +486,52 @@ Sometimes you may encounter a theorem without a proof, in which case you might w
 \CreateTheorem { theorem+* } { (*\commandoption{copy existed}*) = theorem*, (*\commandoption{qed}*) }
 \end{code}
 
-The code above defines two new environments \lstinline|theorem+| and \lstinline|theorem+*| in addition to \lstinline|theorem| and \lstinline|theorem*|. The \lstinline|+| version behaves exactly the same as the usual version, except it has a Q.E.D. symbol.
+The code above defines two new environments \lstinline|theorem+| and \lstinline|theorem+*| in addition to \lstinline|theorem| and \lstinline|theorem*|. The \lstinline|+| version behaves exactly the same as the usual version, except that it has a Q.E.D. symbol.
+
+\subsection{Redefine the {\normalfont\texttt{proof}} environment}
+
+If you wish to have a {\normalfont\texttt{proof}} environment with a custom theorem style, or to have a numbered version {\normalfont\texttt{proof*}} of it, the following code could be helpful:
+
+\begin{code}
+\ExplSyntaxOn
+
+\newcounter { proof }
+\tl_new:N \l_mymodule_name_of_proof_tl
+\CreateTheorem { proof_inner }
+  {
+    (*\commandoption{name}*) = { (*\commandoption{heading}*) = { \l_mymodule_name_of_proof_tl } },
+    (*\commandoption{create-starred-version}*),
+    (*\commandoption{style}*) = remark,
+    (*\commandoption{qed}*),
+    (*\commandoption{shared-counter}*) = proof,
+  }
+
+\cs_undefine:c { proof }
+\cs_undefine:c { endproof }
+\NewDocumentEnvironment { proof } { O{\proofname} }
+  {
+    \tl_set:Nn \l_mymodule_name_of_proof_tl { #1 }
+    \begin { proof_inner* }
+  }
+  {
+    \end { proof_inner* }
+  }
+\NewDocumentEnvironment { proof* } { O{\proofname} }
+  {
+    \tl_set:Nn \l_mymodule_name_of_proof_tl { #1 }
+    \begin { proof_inner }
+  }
+  {
+    \end { proof_inner }
+  }
+
+\SetTheoremBinding { proof } { proof_inner* }
+\SetTheoremBinding { proof* } { proof_inner }
+
+\ExplSyntaxOff
+\end{code}
+
+It defines an environment \lstinline|proof_inner| (with its starred variant) with theorem style \lstinline|remark| to mimic the default style (you are welcome to use your own style here), and with the name to be a variable which is latter used to define the actual environments \lstinline|proof| and \lstinline|proof*|. These two environments are defined in such a way that \lstinline|proof| is the usual unnumbered version and \lstinline|proof*| is the numbered version. The \lstinline|\SetTheoremBinding| lines are to ensure that user can directly write \lstinline|\SetTheorem{proof}| rather than \lstinline|\SetTheorem{proof_inner}|.
 
 
 \bigskip
