@@ -104,7 +104,7 @@
 
 \begin{document}
 
-\def\PackageVersion{2022/08/04}
+\def\PackageVersion{2022/08/05}
 
 \title{\createtheorempackage{}\\\smallskip\itshape Initializing theorem-like environments with multilingual support}
 \author{Jinwen XU}
@@ -278,6 +278,7 @@ Supported keys are:
         \begin{itemize}
             \item Specifying the Q.E.D. symbol for the current environment.
             \item Note that the Q.E.D. symbol has already been put in math mode. If you want regular text such as \textquote{Q.E.D.}, you need to write \commandoption{qed}\lstinline| = \mathrm{Q.E.D.}|.
+            \item If you are using \textsf{ntheorem} as the backend, then you need to load it with option \packageoption{thmmarks}.
             \item Synonymous names: \commandoption{qed symbol} \,$|$\, \commandoption{qed-symbol} \,$|$\, \commandoption{qedsymbol}
         \end{itemize}
     \item \commandoption{parent counter}\lstinline| = |\meta{parent counter}
@@ -532,6 +533,10 @@ If you wish to have a {\normalfont\texttt{proof}} environment with a custom theo
 \end{code}
 
 It defines an environment \lstinline|proof_inner| (with its starred variant) with theorem style \lstinline|remark| to mimic the default style (you are welcome to use your own style here), and with the name to be a variable which is latter used to define the actual environments \lstinline|proof| and \lstinline|proof*|. These two environments are defined in such a way that \lstinline|proof| is the usual unnumbered version and \lstinline|proof*| is the numbered version. The \lstinline|\SetTheoremBinding| lines are to ensure that user can directly write \lstinline|\SetTheorem{proof}| rather than \lstinline|\SetTheorem{proof_inner}|.
+
+\begin{tip}
+    The code above requires \textsf{amsthm}. If you are using \textsf{ntheorem} as the backend, then you need to load it with option \packageoption{amsthm}, and remove the \lstinline|\newcounter| line.
+\end{tip}
 
 
 \bigskip

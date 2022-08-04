@@ -12,7 +12,7 @@
 \NeedsTeXFormat{LaTeX2e}[2022-06-01]
 \ProvidesExplPackage
   {create-theorem}
-  {2022/08/04} {}
+  {2022/08/05} {}
   {Initializing theorem-like environments with multilingual support}
 
 \keys_define:nn { create-theorem }
@@ -38,13 +38,20 @@
   }
 \ProcessKeyOptions [ create-theorem ]
 
+\msg_new:nnn { create-theorem }
+  { no-backend }
+  { A~backend~(such~as~"amsthm")~~is~needed~to~provide~the~commands~"\iow_char:N \\newtheorem(*)"~and~"\iow_char:N \\theoremstyle"~with~the~usual~behaviour. }
+\cs_if_exist:cF { theoremstyle }
+  {
+    \msg_error:nn  { create-theorem } { no-backend }
+  }
+
 \bool_if:NT \l__crthm_nameinlink_bool
   {
     \PassOptionsToPackage { nameinlink } { cleveref }
   }
-
 \RequirePackage { crefthe }
-
+\RequirePackage { amsfonts }
 
 \IfPackageLoadedTF { thmtools }
   {
@@ -698,12 +705,11 @@
     \keys_set:nn { create-theorem-naming } { #2 }
   }
 
-\cs_set_eq:NN \c__crthm_original_qedsymbol_tl \qedsymbol
-
-\bool_new:N \l__crthm_creating_apply_style_bool
-\tl_new:N   \l__crthm_creating_apply_style_tl
+\tl_const:Nn \c__crthm_qedsymbol_tl { \Box }
 \bool_new:N \l__crthm_creating_qed_bool
 \tl_new:N   \l__crthm_creating_qed_tl
+\bool_new:N \l__crthm_creating_apply_style_bool
+\tl_new:N   \l__crthm_creating_apply_style_tl
 \bool_new:N \l__crthm_creating_numberless_bool
 \bool_new:N \l__crthm_creating_create_starred_bool
 \bool_new:N \l__crthm_creating_copy_existed_bool
@@ -737,13 +743,13 @@
     , apply style                 .value_required:n   = true
     , qed                         .code:n             = { \bool_set_true:N \l__crthm_creating_qed_bool
                                                           \tl_set:Nn \l__crthm_creating_qed_tl { #1 }  }
-    , qed                         .default:n          = \c__crthm_original_qedsymbol_tl
+    , qed                         .default:n          = \c__crthm_qedsymbol_tl
     , qed~symbol                  .meta:n             = { qed = #1 }
-    , qed~symbol                  .default:n          = \c__crthm_original_qedsymbol_tl
+    , qed~symbol                  .default:n          = \c__crthm_qedsymbol_tl
     , qed-symbol                  .meta:n             = { qed = #1 }
-    , qed-symbol                  .default:n          = \c__crthm_original_qedsymbol_tl
+    , qed-symbol                  .default:n          = \c__crthm_qedsymbol_tl
     , qed symbol                  .meta:n             = { qed = #1 }
-    , qed symbol                  .default:n          = \c__crthm_original_qedsymbol_tl
+    , qed symbol                  .default:n          = \c__crthm_qedsymbol_tl
     , numberless                  .bool_set:N         = \l__crthm_creating_numberless_bool
     , create~starred~version      .bool_set:N         = \l__crthm_creating_create_starred_bool
     , create-starred-version      .meta:n             = { create~starred~version }
@@ -814,6 +820,7 @@
     \tl_set:Nn \l__crthm_current_env_tl { #1 }
     \bool_set_false:N \l__crthm_creating_apply_style_bool
     \bool_set_false:N \l__crthm_creating_numberless_bool
+    \bool_set_false:N \l__crthm_creating_qed_bool
     \bool_set_false:N \l__crthm_creating_create_starred_bool
     \bool_set_false:N \l__crthm_creating_copy_existed_bool
     \keys_set:nn { create-theorem-creating } { #2 }
@@ -836,6 +843,13 @@
           {
             \cs_if_exist:cTF { c@ #1 }
               {
+                \IfPackageLoadedTF { ntheorem }
+                  {
+                    \bool_if:NT \l__crthm_creating_qed_bool
+                      {
+                        \theoremsymbol { \ensuremath { \l__crthm_creating_qed_tl } }
+                      }
+                  } {}
                 \group_begin:
                 \bool_if:NTF \l__crthm_creating_apply_style_bool
                   {
@@ -859,6 +873,13 @@
                     \crthm_newtheorem:w*{ #1 * } { \tl_use:c { g_crthm_name_heading_ #1 _ \languagename _tl } }
                   }
                 \group_end:
+                \IfPackageLoadedTF { ntheorem }
+                  {
+                    \bool_if:NT \l__crthm_creating_qed_bool
+                      {
+                        \theoremsymbol { }
+                      }
+                  } {}
                 \NewDocumentEnvironment { #1 } { O{} }
                   % In "regionalref" mode, the counter received by the referencing system is "#1 _crthm_regional"
                   % while in "originalref" mode, the counter received is "#1 _crthm_original_\languagename"
@@ -881,16 +902,19 @@
                   }
                 \keys_set:nn { create-theorem-creating / counter-management } { #2 }
 
-                \bool_if:NT \l__crthm_creating_qed_bool
+                \IfPackageLoadedTF { amsthm }
                   {
-                    \exp_args:Nx \hook_gput_code:nnn { env/ \l__crthm_current_env_tl /begin } { crthm } { \cs_set:Npn \qedsymbol { \ensuremath { \l__crthm_creating_qed_tl } } \pushQED{\qed} }
-                    \exp_args:Nx \hook_gput_code:nnn { env/ \l__crthm_current_env_tl /end } { crthm } { \popQED }
-                    \bool_if:NT \l__crthm_creating_create_starred_bool
+                    \bool_if:NT \l__crthm_creating_qed_bool
                       {
-                        \exp_args:Nx \hook_gput_code:nnn { env/ \l__crthm_current_env_tl * /begin } { crthm } { \cs_set:Npn \qedsymbol { \ensuremath { \l__crthm_creating_qed_tl } } \pushQED{\qed} }
-                        \exp_args:Nx \hook_gput_code:nnn { env/ \l__crthm_current_env_tl * /end } { crthm } { \popQED }
+                        \exp_args:Nx \hook_gput_code:nnn { env/ \l__crthm_current_env_tl /begin } { crthm } { \cs_set:Npn \qedsymbol { \ensuremath { \l__crthm_creating_qed_tl } } \pushQED{\qed} }
+                        \exp_args:Nx \hook_gput_code:nnn { env/ \l__crthm_current_env_tl /end } { crthm } { \popQED }
+                        \bool_if:NT \l__crthm_creating_create_starred_bool
+                          {
+                            \exp_args:Nx \hook_gput_code:nnn { env/ \l__crthm_current_env_tl * /begin } { crthm } { \cs_set:Npn \qedsymbol { \ensuremath { \l__crthm_creating_qed_tl } } \pushQED{\qed} }
+                            \exp_args:Nx \hook_gput_code:nnn { env/ \l__crthm_current_env_tl * /end } { crthm } { \popQED }
+                          }
                       }
-                  }
+                  } {}
               }
               {
                 \msg_error:nnn  { create-theorem } { env-not-named } { #1 }
@@ -942,13 +966,13 @@
     , qed                         .code:n             = {
                                                           \exp_args:Nx \hook_gput_code:nnn { env/ \l__crthm_current_env_tl /begin } { crthm } { \cs_set:Npn \qedsymbol { \ensuremath { #1 } } }
                                                         }
-    , qed                         .default:n          = \c__crthm_original_qedsymbol_tl
+    , qed                         .default:n          = \c__crthm_qedsymbol_tl
     , qed~symbol                  .meta:n             = { qed = #1 }
-    , qed~symbol                  .default:n          = \c__crthm_original_qedsymbol_tl
+    , qed~symbol                  .default:n          = \c__crthm_qedsymbol_tl
     , qed-symbol                  .meta:n             = { qed = #1 }
-    , qed-symbol                  .default:n          = \c__crthm_original_qedsymbol_tl
+    , qed-symbol                  .default:n          = \c__crthm_qedsymbol_tl
     , qed symbol                  .meta:n             = { qed = #1 }
-    , qed symbol                  .default:n          = \c__crthm_original_qedsymbol_tl
+    , qed symbol                  .default:n          = \c__crthm_qedsymbol_tl
     , parent~counter              .code:n             = { \crthm_counter_within:en { \l__crthm_current_env_tl } { #1 } }
     , parent~counter              .value_required:n   = true
     , parent-counter              .meta:n             = { parent~counter = { #1 } }
