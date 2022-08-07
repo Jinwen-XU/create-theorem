@@ -12,7 +12,7 @@
 \NeedsTeXFormat{LaTeX2e}[2022-06-01]
 \ProvidesExplPackage
   {create-theorem}
-  {2022/08/05} {}
+  {2022/08/08} {}
   {Initializing theorem-like environments with multilingual support}
 
 \keys_define:nn { create-theorem }
@@ -83,6 +83,7 @@
 \cs_new:Nn \crthm_add_to_language_list:n
   {
     \clist_gput_right:Nn \g_crthm_supported_language_clist { #1 }
+    \clist_gremove_duplicates:N \g_crthm_supported_language_clist
   }
 
 \NewDocumentCommand \CreateTheoremAddLanguage { m }
@@ -704,6 +705,100 @@
       }
     \keys_set:nn { create-theorem-naming } { #2 }
   }
+
+
+\tl_new:N \l__crthm_current_lang_tl
+
+\keys_define:nn { create-theorem-naming-per-language }
+  {
+    , heading               .code:n             = { \crthm_set_name_per_lang_heading:en { \l__crthm_current_lang_tl } { #1 } }
+    , heading               .value_required:n   = true
+    , crefname              .code:n             = { \crthm_set_name_per_lang_crefname:en { \l__crthm_current_lang_tl } { #1 } }
+    , crefname              .value_required:n   = true
+    , Crefname              .code:n             = { \crthm_set_name_per_lang_Crefname:en { \l__crthm_current_lang_tl } { #1 } }
+    , Crefname              .value_required:n   = true
+    , unknown               .code:n             = {}
+  }
+
+\cs_new:Nn \crthm_set_name_per_lang_heading:nn
+  % #1 = language name
+  % #2 = the settings
+  {
+    \keyval_parse:nnn
+      {}
+      { \use:c { __crthm_set_name_per_lang_heading:nnn } { #1 } }
+      { #2 }
+  }
+\cs_generate_variant:Nn \crthm_set_name_per_lang_heading:nn { en }
+
+\cs_new:Nn \__crthm_set_name_per_lang_heading:nnn
+  % #1 = language name
+  % #2 = env name
+  % #3 = corresponding heading name
+  {
+    \tl_if_exist:cF { g_crthm_style_heading_ #2 _ #1 _tl }
+      {
+        \tl_new:c { g_crthm_style_heading_ #2 _ #1 _tl }
+      }
+    \tl_gset:cn { g_crthm_name_heading_ #2 _ #1 _tl } { \tl_use:c { g_crthm_style_heading_ #2 _ #1 _tl } { #3 } }
+  }
+
+\cs_new:Nn \crthm_set_name_per_lang_crefname:nn
+  % #1 = language name
+  % #2 = the settings
+  {
+    \crthm_set_name_per_lang_crefname_generic:nnn { #1 } { #2 } { c }
+  }
+\cs_generate_variant:Nn \crthm_set_name_per_lang_crefname:nn { en }
+
+\cs_new:Nn \crthm_set_name_per_lang_Crefname:nn
+  % #1 = language name
+  % #2 = the settings
+  {
+    \crthm_set_name_per_lang_crefname_generic:nnn { #1 } { #2 } { C }
+  }
+\cs_generate_variant:Nn \crthm_set_name_per_lang_Crefname:nn { en }
+
+\cs_new:Nn \crthm_set_name_per_lang_crefname_generic:nnn
+  % #1 = language name
+  % #2 = the settings
+  % #3 = c or C
+  {
+    \keyval_parse:nnn
+      {}
+      { \use:c { __crthm_set_name_per_lang_ #3 refname:nnn } { #1 } }
+      { #2 }
+  }
+
+\cs_new:Nn \__crthm_set_name_per_lang_crefname:nnn
+  % #1 = language name
+  % #2 = env name
+  % #3 = corresponding crefname {..}{..} or [..]{..}[..]{..}
+  {
+    \__crthm_set_name_crefname_generic:w { #2 } { #1 } #3 { c }
+  }
+
+\cs_new:Nn \__crthm_set_name_per_lang_Crefname:nnn
+  % #1 = language name
+  % #2 = env name
+  % #3 = corresponding Crefname {..}{..} or [..]{..}[..]{..}
+  {
+    \__crthm_set_name_crefname_generic:w { #2 } { #1 } #3 { C }
+  }
+
+
+\NewDocumentCommand \NameTheorems { m m }
+  {
+    \crthm_name_theorems:nn { #1 } { #2 }
+  }
+
+\cs_new:Nn \crthm_name_theorems:nn
+  {
+    \tl_set:Nn \l__crthm_current_lang_tl { #1 }
+    \crthm_add_to_language_list:n { #1 }
+    \keys_set:nn { create-theorem-naming-per-language } { #2 }
+  }
+
 
 \tl_const:Nn \c__crthm_qedsymbol_tl { \Box }
 \bool_new:N \l__crthm_creating_qed_bool
