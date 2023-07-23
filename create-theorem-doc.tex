@@ -46,6 +46,7 @@
         crefformat,
         crefthe,crefthename,
         Crefthe,Crefthename,
+        crefthevariantname,Crefthevariantname,
         crefthemark,
         selectlanguage,
         languagename,
@@ -106,10 +107,10 @@
 
 \begin{document}
 
-\def\PackageVersion{2023/07/14}
+\def\PackageVersion{2023/07/23}
 \def\PackageSubVersion{}
 
-\title{\createtheorempackage{}\\\smallskip\itshape Initializing theorem-like environments with multilingual support}
+\title{\createtheorempackage{}\\\smallskip\itshape Initializing and configuring theorem-like environments, with multilingual support}
 \author{Jinwen XU}
 \thanks{Corresponding to: \texttt{\createtheorempackage{} \PackageVersion\PackageSubVersion}}
 \date{\TheDate{\PackageVersion}[only-year-month], in Beijing}
@@ -217,20 +218,32 @@ Supported keys are:
 \begin{code}
 [(*\meta{singular definite article}*)]{(*\meta{singular name}*)}[(*\meta{plural definite article}*)]{(*\meta{plural name}*)}
 \end{code}
+            This would be useful for languages like French, Italian, Spanish, etc.
+            \item Also supports the syntax of \lstinline|\crefthevariantname|, thus you can assign different set of names for different variants/declensions (the first line in the configuration is the default name set, which is used in case no variants is specified when referencing):
+\begin{code}
+(*\commandoption{crefname}*) = {
+    (*\meta{language name}*) = { [...]{...}[...]{...}
+        , (*\meta{variant 1}*) = [...]{...}[...]{...}
+        , (*\meta{variant 2}*) = [...]{...}[...]{...}
+        ...
+    }
+  }
+\end{code}
+            This would be useful for languages like German, Russian, etc.
         \end{itemize}
     \item \commandoption{crefname style}\lstinline| = |\meta{style}
         \begin{itemize}
-            \item The style of the \textquote{crefname}, you can specify the font, text style, color, etc.
+            \item The style of \textquote{crefname} when referencing, you may specify the font, text style, color, etc.
             \item Synonymous names: \commandoption{crefname-style} \,$|$\, \commandoption{crefnamestyle}
         \end{itemize}
     \item \commandoption{Crefname}\lstinline| = |\meta{configuration}
         \begin{itemize}
             \item The name for \lstinline|\Cref| the environment, its syntax is the same as that of \commandoption{crefname}.
-            \item Also supports the syntax of \lstinline|\Crefthename|.
+            \item Also supports the syntax of \lstinline|\Crefthename| and \lstinline|\Crefthevariantname|.
         \end{itemize}
     \item \commandoption{Crefname style}\lstinline| = |\meta{style}
         \begin{itemize}
-            \item The style of the \textquote{Crefname}, you can specify the font, text style, color, etc.
+            \item The style of \textquote{Crefname} when referencing, you may specify the font, text style, color, etc.
             \item Synonymous names: \commandoption{Crefname-style} \,$|$\, \commandoption{Crefnamestyle}
         \end{itemize}
     \item \commandoption{numbering style}\lstinline| = |\meta{style}
@@ -263,7 +276,6 @@ The syntax of \lstinline|\CreateTheorem| is as follows:
     When the \meta{key-value configuration} is empty, don't forget to include the second pair of curly brackets, for example, \lstinline|\CreateTheorem{theorem}{}|.
 \end{tip}
 
-\enlargethispage{2\baselineskip}
 Supported keys are:
 \vspace{-.2\baselineskip}
 \begin{itemize}[label=,leftmargin=1.25em,itemindent=-1.25em]
@@ -289,6 +301,7 @@ Supported keys are:
             \item If you are using \textsf{ntheorem} as the backend, then you need to load it with option \packageoption{thmmarks}.
             \item Synonymous names: \commandoption{qed symbol} \,$|$\, \commandoption{qed-symbol} \,$|$\, \commandoption{qedsymbol}
         \end{itemize}
+\pagebreak
     \item \commandoption{parent counter}\lstinline| = |\meta{parent counter}
         \begin{itemize}
             \item Specifying the \meta{parent counter} for the current environment, \emph{i.e.}, numbering will restart whenever that sectional level is encountered.
@@ -309,7 +322,6 @@ Supported keys are:
             \item It must be placed \emph{before} \commandoption{qed} if you want the starred version to have a Q.E.D symbol.
             \item Synonymous names: \commandoption{create-starred-version} \,$|$\, \commandoption{createstarredversion} \,$|$\, \\\phantom{Synonymous names: }\commandoption{create numberless version} \,$|$\, \commandoption{create-numberless-version}~\,$|$\\\phantom{Synonymous names: }\commandoption{createnumberlessversion}
         \end{itemize}
-\pagebreak
     \item \commandoption{copy existed}\lstinline| = |\meta{existed environment}
         \begin{itemize}
             \item Defining the current environment to be the same as \meta{existed environment}.
@@ -329,6 +341,7 @@ Supported keys are:
 \medskip
 
 Please note that, for the sake of generality, the environment \meta{env} and its starred relative \meta{env}\texttt{*} do \emph{not} share the same set of names when they are separately defined. However, with proper usage of \commandoption{create starred version} and \commandoption{copy existed}, you should already be able to produce all of the following combinations that shares the same set of names: 1$)$ numbered \meta{env}, numbered \meta{env}\texttt{*} ; 2$)$ numbered \meta{env}, unnumbered \meta{env}\texttt{*} ; 3$)$ unnumbered \meta{env}, numbered \meta{env}\texttt{*} ; and 4$)$ unnumbered \meta{env}, unnumbered \meta{env}\texttt{*}. I left it as an easy exercise for you ;-)
+The answer can be found in section \labelcref{subsec:numbering}.
 
 \medskip
 \subsection[Configuring theorem-like environments]{Configuring theorem-like environments with \texttt{\textcolor{code-main}{\textbackslash SetTheorem}}}
@@ -384,6 +397,7 @@ In some cases, you may define an internal environment (for example, a generic ve
 
 The command \lstinline|\NameTheorem| introduced earlier is for defining the names of a given environment for each language, which is more natural to use within a real-life document. However, for package/class authors wishing to maintain their language configuration files, it would be more convenient to use the following \lstinline|\NameTheorems|, which assigns the names for a given language all at once, made it possible to preset the names inside external files.
 
+\enlargethispage*{\baselineskip}
 The syntax of \lstinline|\NameTheorems| is as follows (please note that the \meta{language name} here should be consistent with \lstinline|\languagename|):
 \begin{code}
 \NameTheorems{(*\meta{language name}*)}{(*\meta{key-value configuration}*)}
@@ -409,15 +423,14 @@ Supported keys are (notice that you \emph{cannot} set the styles via \lstinline|
     (*\meta{name of environment}*) = {(*\meta{singular name}*)}{(*\meta{plural name}*)}
   }
 \end{code}
-            \item Also supports the syntax of \lstinline|\crefthename|, thus you can assign names of the form:
-\begin{code}
-[(*\meta{singular definite article}*)]{(*\meta{singular name}*)}[(*\meta{plural definite article}*)]{(*\meta{plural name}*)}
-\end{code}
+            \item Also supports the syntax of \lstinline|\crefthename| and \lstinline|\crefthevariantname|.\\
+            Please refer to the description of \lstinline|\NameTheorem| for more details.
         \end{itemize}
     \item \commandoption{Crefname}\lstinline| = |\meta{configuration}
         \begin{itemize}
             \item The names for \lstinline|\Cref| the environments, its syntax is the same as that of \commandoption{crefname}.
-            \item Also supports the syntax of \lstinline|\Crefthename|.
+            \item Also supports the syntax of \lstinline|\Crefthename| and \lstinline|\Crefthevariantname|.\\
+            Please refer to the description of \lstinline|\NameTheorem| for more details.
         \end{itemize}
 \end{itemize}
 
@@ -460,30 +473,51 @@ or to do it in one turn:
 \end{code}
 
 \smallskip
-This is not exciting at all. Now, let's say we are writing a bilingual note in English and French. (I shall omit the \lstinline|\NameTheorem| version and do it all at once in \lstinline|\CreateTheorem|.)
+This is not exciting at all. Now, let's say we are writing a trilingual note in English, French and German. (I shall omit the \lstinline|\NameTheorem| version and do it all at once in \lstinline|\CreateTheorem|.)
 
 \begin{code}
 \CreateTheorem{idea}
   {
     (*\commandoption{name}*) = {
         (*\commandoption{heading}*)  = { english = Idea,
-                       french = Idée, },
+                       french = Idée,
+                       ngerman = Idee, },
         (*\commandoption{crefname}*) = { english = {idea}{ideas},
-                       french = [l']{idée}[les]{idées}, },
+                       french = [l']{idée}[les]{idées},
+                       ngerman = { {Idee}{Idee}
+                         , Nominativ = [die]{Idee}[die]{Ideen}
+                         , Genitiv   = [der]{Idee}[der]{Ideen}
+                         , Dativ     = [der]{Idee}[den]{Ideen}
+                         , Akkusativ = [die]{Idee}[die]{Ideen}
+                       } },
         (*\commandoption{Crefname}*) = { english = {Idea}{Ideas},
-                       french = [L']{idée}[Les]{idées}, },
+                       french = [L']{idée}[Les]{idées},
+                       ngerman = { {Idee}{Idee}
+                         , Nominativ = [Die]{Idee}[Die]{Ideen}
+                         , Genitiv   = [Der]{Idee}[Der]{Ideen}
+                         , Dativ     = [Der]{Idee}[Den]{Ideen}
+                         , Akkusativ = [Die]{Idee}[Die]{Ideen}
+                       } },
       },
     (*\commandoption{parent counter}*) = section,
   }
 \end{code}
 
-With this, if you use \lstinline|\selectlanguage{french}|, the {\normalfont\texttt{idea}} environment shall be automatically displayed as \textquote{Idée}. And if you \lstinline|\crefthe| it, the definite article and the name showed up properly just as expected.
+With this, if you use \lstinline|\selectlanguage{french}|, the {\normalfont\texttt{idea}} environment shall be automatically displayed as \textquote{Idée}. And if you \lstinline|\crefthe| it, the definite article and the name would show up properly just as expected.
 
-Next we shall deal with the problem of numbering. Let's continue to use this environment {\normalfont\texttt{idea}} for demonstration -- suppose that we have already set the names with \lstinline|\NameTheorem|.
+The same happens for German with \lstinline|\selectlanguage{ngerman}|, and when referencing an {\normalfont\texttt{idea}} environment, you may specify the declension as with \lstinline|\crefthe[|\meta{prep}\lstinline|,variant=Nominativ]{|\meta{label}\lstinline|}|, or simply with shortcut such as \lstinline|\crefthe[|\meta{prep}\lstinline|,nom.]{|\meta{label}\lstinline|}|.
+
+\begin{tip}
+    For more datailed usage of the referencing command \lstinline|\crefthe|, please refer to the documentation of the package \textsf{crefthe}.
+\end{tip}
+
+\bigskip
+Next we shall deal with the problem of numbering. Let's continue to use this environment {\normalfont\texttt{idea}} for demonstration --- suppose that we have already set the names with \lstinline|\NameTheorem|.
 
 
 \medskip
 \subsection{Let's play with numbering}
+\label{subsec:numbering}
 
 Remember the exercise I left you in the previous section? Let's do it together now.
 
@@ -535,13 +569,12 @@ This is essentially the combination of the first two cases --- we need to create
 \medskip
 In each case, the two environments {\normalfont\texttt{idea}} and {\normalfont\texttt{idea*}} share the same set of names.
 
-\enlargethispage{\baselineskip}
 \begin{tip}[Attention]
-    The sole purpose of this section is to demonstrate the feature of this package -- some combinations are not recommended to use in the actual documents.
+    The sole purpose of this section is to demonstrate the feature of this package --- some combinations are not recommended to use in the actual documents.
 \end{tip}
 
 
-\subsection{The \emph{proofless} version -- theorems with a Q.E.D. symbol}
+\subsection{The \emph{proofless} version --- theorems with a Q.E.D. symbol}
 
 Sometimes you may encounter a theorem without a proof, in which case you might want a Q.E.D. symbol when the theorem is finished. This can be easily achieved via:
 
@@ -628,7 +661,7 @@ A typical configuration looks like this:
   }
 \end{code}
 
-Here is another example for French:
+Here is an example for French:
 
 \begin{code}
 \NameTheorems { french }
@@ -654,15 +687,44 @@ Here is another example for French:
   }
 \end{code}
 
+And an example for German:
+
+\begin{code}
+\NameTheorems { ngerman }
+  {
+    , (*\commandoption{heading}*) =   {
+                     , theorem        = Satz
+                     ...
+                   }
+    , (*\commandoption{crefname}*) =  {
+                     , theorem        = { {Satz}{Sätze}
+                         , Nominativ = [der]{Satz}[die]{Sätze}
+                         , Genitiv   = [des]{Satzes}[der]{Sätze}
+                         , Dativ     = [dem]{Satz}[den]{Sätzen}
+                         , Akkusativ = [den]{Satz}[die]{Sätze}
+                       }
+                     ...
+                   }
+    , (*\commandoption{Crefname}*) =  {
+                     , theorem        = { {Satz}{Sätze}
+                         , Nominativ = [Der]{Satz}[Die]{Sätze}
+                         , Genitiv   = [Des]{Satzes}[Der]{Sätze}
+                         , Dativ     = [Dem]{Satz}[Den]{Sätzen}
+                         , Akkusativ = [Den]{Satz}[Die]{Sätze}
+                       }
+                     ...
+                   }
+  }
+\end{code}
+
 \medskip
-The configuration using \lstinline|\NameTheorems| is compatible with that using \lstinline|\NameTheorem| and there is no need to worry about duplicated definitions -- new settings will automatically overwrite the old ones.
+The configuration using \lstinline|\NameTheorems| is compatible with that using \lstinline|\NameTheorem| and there is no need to worry about duplicated definitions --- new settings will automatically overwrite the old ones.
 
 
-\bigskip
+\clearpage
 \section{Known issues}
 
 \begin{itemize}
-    \item The current mechanism does not work well for German, a problem originated in the package \textsf{crefthe}. The author plans to adopt a more refined approach in a later version so as to support the various grammatical situations in German.
     \item \createtheorempackage{} modifies some undocumented internal macros of \textsf{cleveref}, so the behaviour might not be stable if \textsf{cleveref} gets updated.
     \item The counter aliasing function is still not perfect, (sometimes) causing incorrect ordering in the result of \lstinline|\cref|.
     \item There might be inaccuracies in the translation of those preset names.
