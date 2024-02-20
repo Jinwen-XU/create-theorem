@@ -107,13 +107,13 @@
 
 \begin{document}
 
-\def\PackageVersion{2023/07/23}
+\def\PackageVersion{2024/02/20}
 \def\PackageSubVersion{}
 
 \title{\createtheorempackage{}\\\smallskip\itshape Initializing and configuring theorem-like environments, with multilingual support}
 \author{Jinwen XU}
 \thanks{Corresponding to: \texttt{\createtheorempackage{} \PackageVersion\PackageSubVersion}}
-\date{\TheDate{\PackageVersion}[only-year-month], in Beijing}
+\date{\TheDate{\PackageVersion}[only-year-month], in Paris}
 
 \maketitle
 
@@ -725,7 +725,9 @@ The configuration using \lstinline|\NameTheorems| is compatible with that using 
 \section{Known issues}
 
 \begin{itemize}
-    \item \createtheorempackage{} modifies some undocumented internal macros of \textsf{cleveref}, so the behaviour might not be stable if \textsf{cleveref} gets updated.
+    \item \createtheorempackage{} modifies some undocumented internal macros of \textsf{cleveref}, so the behavior might not be stable if \textsf{cleveref} gets updated one day.
+    \item The current naming mechanism for theorems essentially follows the syntax of \textsf{cleveref}. The configuration may look somewhat redundant. In a future version, a new mechanism is planed to be introduced, which would be similar to the method used by \textsf{zref-clever}.
+    \item It is current not possible to temporarily change the referencing type when referencing, which makes it difficult to reference a \textquote{\texttt{namedtheorem}}, or if you have both the singular and plural form of an environment, say \textquote{\texttt{example}} and \textquote{\texttt{examples}}, they would be referred to as two separate types.
     \item The counter aliasing function is still not perfect, (sometimes) causing incorrect ordering in the result of \lstinline|\cref|.
     \item There might be inaccuracies in the translation of those preset names.
 \end{itemize}

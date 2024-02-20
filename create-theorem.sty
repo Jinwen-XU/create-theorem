@@ -1,5 +1,5 @@
 %%
-%% Copyright (C) 2021-2023 by Jinwen XU
+%% Copyright (C) 2021-2024 by Jinwen XU
 %% ------------------------------------
 %%
 %% This file may be distributed and/or modified under the conditions of
@@ -12,7 +12,7 @@
 \NeedsTeXFormat{LaTeX2e}[2022-06-01]
 \ProvidesExplPackage
   {create-theorem}
-  {2023/07/23} {}
+  {2024/02/20} {}
   {Initializing theorem-like environments with multilingual support}
 
 \keys_define:nn { create-theorem }
@@ -346,7 +346,8 @@
       }
 
     % Redefine the cref formats so that definite articles are placed outside the hyperlinks
-    \crthm_define_format_short_version:nnnn { #2 } { #4 ref@ #1 @format }
+    \crthm_modify_format_according_to_nameinlink:nnn
+      { \crthm_define_format_short_version:nnnn { #2 } { #4 ref@ #1 @format } }
       { \tl_use:c { g_crthm_name_ #4 ref_article_singular_ #2 _ #3 _tl } }
       {
         \bool_if:NTF \g__crefthe_has_prep_bool
@@ -357,7 +358,8 @@
             \tl_use:c { g_crthm_name_ #4 ref_singular_ #2 _ #3 _tl }
           }
       }
-    \crthm_define_format_short_version:nnnn { #2 } { #4 ref@ #1 @format@first }
+    \crthm_modify_format_according_to_nameinlink:nnn
+      { \crthm_define_format_short_version:nnnn { #2 } { #4 ref@ #1 @format@first } }
       { \tl_use:c { g_crthm_name_ #4 ref_article_plural_ #2 _ #3 _tl } }
       {
         \bool_if:NTF \g__crefthe_has_prep_bool
@@ -390,7 +392,8 @@
         \group_end:
       }
 
-    \crthm_define_format_long_version:nnnn { #2 } { #4 refrange@ #1 @format }
+    \crthm_modify_format_according_to_nameinlink:nnn
+      { \crthm_define_format_long_version:nnnn { #2 } { #4 refrange@ #1 @format } }
       { \tl_use:c { g_crthm_name_ #4 ref_article_plural_ #2 _ #3 _tl } }
       {
         \bool_if:NTF \g__crefthe_has_prep_bool
@@ -401,7 +404,8 @@
             \tl_use:c { g_crthm_name_ #4 ref_plural_ #2 _ #3 _tl }
           }
       }
-    \crthm_define_format_long_version:nnnn { #2 } { #4 refrange@ #1 @format@first }
+    \crthm_modify_format_according_to_nameinlink:nnn
+      { \crthm_define_format_long_version:nnnn { #2 } { #4 refrange@ #1 @format@first } }
       { \tl_use:c { g_crthm_name_ #4 ref_article_plural_ #2 _ #3 _tl } }
       {
         \bool_if:NTF \g__crefthe_has_prep_bool
@@ -507,11 +511,26 @@
       }
   }
 
+\cs_new:Nn \crthm_modify_format_according_to_nameinlink:nnn
+  % #1 = the macro (and argument) to be used
+  % #2 = content always before the hyperlink beginning mark
+  % #3 = content before or after the hyperlink beginning mark, depending on whether nameinlink=true
+  {
+    \bool_if:NTF \l__crthm_nameinlink_bool
+      {
+        #1 { #2 } { #3 }
+      }
+      {
+        #1 { #2 #3 \nobreakspace } { }
+      }
+  }
+
 \cs_new:Nn \crthm_define_format_short_version:nnnn
-  { % #1 = name of the environment
-    % #2 = name of the format command
-    % #3 = content before the hyperlink beginning mark
-    % #4 = content after the hyperlink beginning mark
+  % #1 = name of the environment
+  % #2 = name of the format command
+  % #3 = content before the hyperlink beginning mark
+  % #4 = content after the hyperlink beginning mark
+  {
     \cs_if_exist:cF { crthm_format_ #2 :nnn }
       {
         \cs_new:cn { crthm_format_ #2 :nnn }
@@ -524,10 +543,11 @@
       }
   }
 \cs_new:Nn \crthm_define_format_long_version:nnnn
-  { % #1 = name of the environment
-    % #2 = name of the format command
-    % #3 = content before the hyperlink beginning mark
-    % #4 = content after the hyperlink beginning mark
+  % #1 = name of the environment
+  % #2 = name of the format command
+  % #3 = content before the hyperlink beginning mark
+  % #4 = content after the hyperlink beginning mark
+  {
     \cs_if_exist:cF { crthm_format_ #2 :nnnnnn }
       {
         \cs_new:cn { crthm_format_ #2 :nnnnnn }
@@ -939,6 +959,8 @@
   { The~theorem-like~environment~"#1"~cannot~be~created,~you~have~to~name~it~before~initialization. }
 
 \cs_new:Nn \crthm_create_theorem:nn
+  % #1 = env name
+  % #2 = options
   {
     \tl_set:Nn \l__crthm_current_env_tl { #1 }
     \bool_set_false:N \l__crthm_creating_apply_style_bool

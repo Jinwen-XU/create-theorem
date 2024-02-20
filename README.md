@@ -1,4 +1,4 @@
-<!-- Copyright (C) 2021-2023 by Jinwen XU -->
+<!-- Copyright (C) 2021-2024 by Jinwen XU -->
 
 # `create-theorem` - Initializing and configuring theorem-like environments, with multilingual support
 
