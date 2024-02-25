@@ -12,7 +12,7 @@
 \NeedsTeXFormat{LaTeX2e}[2022-06-01]
 \ProvidesExplPackage
   {create-theorem}
-  {2024/02/20} {}
+  {2024/02/25} {}
   {Initializing theorem-like environments with multilingual support}
 
 \keys_define:nn { create-theorem }
@@ -1170,11 +1170,11 @@
       }
   }
 
-
+% Load predefined namesets
 \bool_if:NT \l__crthm_presetname_bool
   {
-    \input { create-theorem-preset-names }
-    \input { create-theorem-preset-names-plural }
+    \input { create-theorem-preset-names-cleveref }
+    \input { create-theorem-preset-names-plural-cleveref }
   }
 
 \endinput
