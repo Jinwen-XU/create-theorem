@@ -3,6 +3,8 @@
 
 \usepackage{ProjLib}
 
+\setmonofont[Scale=.9]{Iosevka}
+
 %%================================
 %% For typesetting code
 %%================================
@@ -24,7 +26,9 @@
     breaklines = true,
     frame = lines,
     backgroundcolor = \color{code-background},
-    flexiblecolumns = true,
+    % flexiblecolumns = true,
+    % columns = fixed,
+    basewidth=.5em,
     escapeinside = {(*}{*)},
     alsoletter = {_,:},
     % numbers = left,
@@ -72,8 +76,8 @@
 \lstnewenvironment{code}{\setstretch{1.05}\LocallyStopLineNumbers}{\ResumeLineNumbers\vspace{-.3\baselineskip}\vspace{-.5\parskip}}
 \lstnewenvironment{code*}{\setstretch{1.05}\lstset{numbers=left}\LocallyStopLineNumbers}{\ResumeLineNumbers\vspace{-.3\baselineskip}\vspace{-.5\parskip}}
 
-\newcommand{\packageoption}[1]{\texttt{\textcolor{code-option}{#1}}}
-\newcommand{\commandoption}[1]{\texttt{\textcolor{code-keys}{#1}}}
+\newcommand{\packageoption}[1]{\textcolor{code-option}{\texttt{#1}}}
+\newcommand{\commandoption}[1]{\textcolor{code-keys}{\texttt{#1}}}
 
 %%================================
 %% tip
@@ -480,24 +484,24 @@ This is not exciting at all. Now, let's say we are writing a trilingual note in 
   {
     (*\commandoption{name}*) = {
         (*\commandoption{heading}*)  = { english = Idea,
-                       french = Idée,
-                       ngerman = Idee, },
+                     french = Idée,
+                     ngerman = Idee, },
         (*\commandoption{crefname}*) = { english = {idea}{ideas},
-                       french = [l']{idée}[les]{idées},
-                       ngerman = { {Idee}{Idee}
-                         , Nominativ = [die]{Idee}[die]{Ideen}
-                         , Genitiv   = [der]{Idee}[der]{Ideen}
-                         , Dativ     = [der]{Idee}[den]{Ideen}
-                         , Akkusativ = [die]{Idee}[die]{Ideen}
-                       } },
+                     french = [l']{idée}[les]{idées},
+                     ngerman = { {Idee}{Idee}
+                       , Nominativ = [die]{Idee}[die]{Ideen}
+                       , Genitiv   = [der]{Idee}[der]{Ideen}
+                       , Dativ     = [der]{Idee}[den]{Ideen}
+                       , Akkusativ = [die]{Idee}[die]{Ideen}
+                   } },
         (*\commandoption{Crefname}*) = { english = {Idea}{Ideas},
-                       french = [L']{idée}[Les]{idées},
-                       ngerman = { {Idee}{Idee}
-                         , Nominativ = [Die]{Idee}[Die]{Ideen}
-                         , Genitiv   = [Der]{Idee}[Der]{Ideen}
-                         , Dativ     = [Der]{Idee}[Den]{Ideen}
-                         , Akkusativ = [Die]{Idee}[Die]{Ideen}
-                       } },
+                     french = [L']{idée}[Les]{idées},
+                     ngerman = { {Idee}{Idee}
+                       , Nominativ = [Die]{Idee}[Die]{Ideen}
+                       , Genitiv   = [Der]{Idee}[Der]{Ideen}
+                       , Dativ     = [Der]{Idee}[Den]{Ideen}
+                       , Akkusativ = [Die]{Idee}[Die]{Ideen}
+                   } },
       },
     (*\commandoption{parent counter}*) = section,
   }
@@ -505,7 +509,7 @@ This is not exciting at all. Now, let's say we are writing a trilingual note in 
 
 With this, if you use \lstinline|\selectlanguage{french}|, the {\normalfont\texttt{idea}} environment shall be automatically displayed as \textquote{Idée}. And if you \lstinline|\crefthe| it, the definite article and the name would show up properly just as expected.
 
-The same happens for German with \lstinline|\selectlanguage{ngerman}|, and when referencing an {\normalfont\texttt{idea}} environment, you may specify the declension as with \lstinline|\crefthe[|\meta{prep}\lstinline|,variant=Nominativ]{|\meta{label}\lstinline|}|, or simply with shortcut such as \lstinline|\crefthe[|\meta{prep}\lstinline|,nom.]{|\meta{label}\lstinline|}|.
+The same happens for German with \lstinline|\selectlanguage{ngerman}|, and when referencing an {\normalfont\texttt{idea}} environment, you may specify the declension as \lstinline|\crefthe[|\meta{prep}\lstinline|,declension=Nominativ]|\lstinline|{|\meta{label}\lstinline|}|, or more simply, with a shortcut such as \lstinline|\crefthe[|\meta{prep}\lstinline|,nom.]{|\meta{label}\lstinline|}|.
 
 \begin{tip}
     For more datailed usage of the referencing command \lstinline|\crefthe|, please refer to the documentation of the package \textsf{crefthe}.
@@ -644,20 +648,20 @@ A typical configuration looks like this:
 \NameTheorems { english }
   {
     , (*\commandoption{heading}*) =   {
-                     , theorem        = Theorem
-                     , proposition    = Proposition
-                     ...
-                   }
+                    , theorem        = Theorem
+                    , proposition    = Proposition
+                    ...
+                  }
     , (*\commandoption{crefname}*) =  {
-                     , theorem        = {theorem}{theorems}
-                     , proposition    = {proposition}{propositions}
-                     ...
-                   }
+                    , theorem        = {theorem}{theorems}
+                    , proposition    = {proposition}{propositions}
+                    ...
+                  }
     , (*\commandoption{Crefname}*) =  {
-                     , theorem        = {Theorem}{Theorems}
-                     , proposition    = {Proposition}{Propositions}
-                     ...
-                   }
+                    , theorem        = {Theorem}{Theorems}
+                    , proposition    = {Proposition}{Propositions}
+                    ...
+                  }
   }
 \end{code}
 
@@ -667,23 +671,23 @@ Here is an example for French:
 \NameTheorems { french }
   {
     , (*\commandoption{heading}*) =   {
-                     , theorem        = Théorème
-                     , proposition    = Proposition
-                     , example        = Exemple
-                     ...
-                   }
+                    , theorem        = Théorème
+                    , proposition    = Proposition
+                    , example        = Exemple
+                    ...
+                  }
     , (*\commandoption{crefname}*) =  {
-                     , theorem        = [le]{théorème}[les]{théorèmes}
-                     , proposition    = [la]{proposition}[les]{propositions}
-                     , example        = [l']{exemple}[les]{exemples}
-                     ...
-                   }
+                    , theorem        = [le]{théorème}[les]{théorèmes}
+                    , proposition    = [la]{proposition}[les]{propositions}
+                    , example        = [l']{exemple}[les]{exemples}
+                    ...
+                  }
     , (*\commandoption{Crefname}*) =  {
-                     , theorem        = [Le]{théorème}[Les]{théorèmes}
-                     , proposition    = [La]{proposition}[Les]{propositions}
-                     , example        = [L']{exemple}[Les]{exemples}
-                     ...
-                   }
+                    , theorem        = [Le]{théorème}[Les]{théorèmes}
+                    , proposition    = [La]{proposition}[Les]{propositions}
+                    , example        = [L']{exemple}[Les]{exemples}
+                    ...
+                  }
   }
 \end{code}
 
@@ -693,27 +697,27 @@ And an example for German:
 \NameTheorems { ngerman }
   {
     , (*\commandoption{heading}*) =   {
-                     , theorem        = Satz
-                     ...
-                   }
+                    , theorem       = Satz
+                    ...
+                  }
     , (*\commandoption{crefname}*) =  {
-                     , theorem        = { {Satz}{Sätze}
-                         , Nominativ = [der]{Satz}[die]{Sätze}
-                         , Genitiv   = [des]{Satzes}[der]{Sätze}
-                         , Dativ     = [dem]{Satz}[den]{Sätzen}
-                         , Akkusativ = [den]{Satz}[die]{Sätze}
-                       }
-                     ...
-                   }
+                    , theorem       = { {Satz}{Sätze}
+                        , Nominativ = [der]{Satz}[die]{Sätze}
+                        , Genitiv   = [des]{Satzes}[der]{Sätze}
+                        , Dativ     = [dem]{Satz}[den]{Sätzen}
+                        , Akkusativ = [den]{Satz}[die]{Sätze}
+                      }
+                    ...
+                  }
     , (*\commandoption{Crefname}*) =  {
-                     , theorem        = { {Satz}{Sätze}
-                         , Nominativ = [Der]{Satz}[Die]{Sätze}
-                         , Genitiv   = [Des]{Satzes}[Der]{Sätze}
-                         , Dativ     = [Dem]{Satz}[Den]{Sätzen}
-                         , Akkusativ = [Den]{Satz}[Die]{Sätze}
-                       }
-                     ...
-                   }
+                    , theorem       = { {Satz}{Sätze}
+                        , Nominativ = [Der]{Satz}[Die]{Sätze}
+                        , Genitiv   = [Des]{Satzes}[Der]{Sätze}
+                        , Dativ     = [Dem]{Satz}[Den]{Sätzen}
+                        , Akkusativ = [Den]{Satz}[Die]{Sätze}
+                      }
+                    ...
+                  }
   }
 \end{code}
 
