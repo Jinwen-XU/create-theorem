@@ -6,6 +6,8 @@ The package `create-theorem` provides the commands `\NameTheorem`, `\CreateTheor
 
 *For more information, please refer to its documentation.*
 
+> Package dependencies: [`amsfonts`](https://ctan.org/pkg/amsfonts), [*`amsthm`*](https://ctan.org/pkg/amsthm), [`crefthe`](https://ctan.org/pkg/crefthe), [*`ntheorem`*](https://ctan.org/pkg/ntheorem).
+
 # License
 
 This work is released under the LaTeX Project Public License, v1.3c or later.
