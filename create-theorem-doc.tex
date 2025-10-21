@@ -134,14 +134,14 @@
 
 \section{How to load it}
 
-First, you need a backend to provide the command \lstinline|\newtheorem| with the usual behaviour, for example, \textsf{amsthm} or \textsf{ntheorem}. After that, you can simply load the current package with:
+First, you need a \textbf{backend} to provide the command \lstinline|\newtheorem| with its usual behaviour, such as \textcolor{red}{\textsf{amsthm}} or \textcolor{red}{\textsf{ntheorem}}. After that, you can simply load the current package with:
 
 \begin{code}
 \usepackage[(*\meta{options}*)]{create-theorem}
 \end{code}
 
 \begin{tip}[Attention]
-    Since \createtheorempackage{} uses \textsf{cleveref} internally, it should usually be placed near the last of your preamble --- notably, it needs to be loaded after \textsf{varioref} and \textsf{hyperref}.
+    Since \createtheorempackage{} uses \textsf{cleveref} internally, it should usually be placed \textcolor{red}{near the end of preamble} --- notably, it must be loaded \textcolor{red}{after} the packages \textsf{varioref} and \textsf{hyperref}.
 \end{tip}
 
 \medskip
